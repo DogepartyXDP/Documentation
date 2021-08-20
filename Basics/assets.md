@@ -4,7 +4,7 @@ Assets
 
 With Dogeparty, users can create their own assets (also known as "tokens", "coins" or "currencies") _inside_ the Dogecoin blockchain. These are seperate from Dogecoin the currency itself, but exist entirely inside ordinary Dogecoin transactions. Tokens can be received, stored, and sent from any Dogecoin address to any other. They can also be placed in cold storage. Unlike Colored Coins, Dogeparty tokens are _not_ tied to the DOGE balance of any given address. This means that sending/receiving Dogecoins has no effect on the balance of tokens.
 
-Among other features, Dogeparty adds the ability *create*, *send*, *trade*, and *pay distributions on* assets, in a fully decentralized and trustless manner. While Dogeparty has its own internal currency (XDP), trading and creating assets does not require anything apart from regular Dogecoin transaction fees.
+Among other features, Dogeparty adds the ability *create*, *send*, *trade*, and *pay dividends on* assets, in a fully decentralized and trustless manner. While Dogeparty has its own internal currency (XDP), trading and creating assets does not require anything apart from regular Dogecoin transaction fees.
 
 Many of the features described below can be accessed using the [Dogeparty wallets](https://dogeparty.net/wallets/). Especially casual users and those without a `dogeparty-cli` setup can benefit from the convenience of a dogeparty compatible wallet.
 
@@ -47,7 +47,7 @@ To send an asset in Dogeparty, one must specify:
 -   how much of `asset` `source` is sending (`quantity`)
 -   to whom `source` is sending `quantity` of asset (`destination`)
 
-# Paying distributions on assets
+# Paying dividends on assets
 
 It is possible to distribute funds proportionally among asset holders using the `dividend`
 function. This feature is also also known as `dividend payments`, depending on their desired purpose. Dividends are paid in any `dividend_asset` to everyone who holds the `asset` in proportion to how many units he holds; specifically: 
@@ -137,6 +137,6 @@ If you have an altcoin that seeks to fulfill a specific purpose, but do not wish
 
 Dogeparty supports voting through the use of user-created tokens. This means that you can post the terms and options of your vote as a broadcast, and let users vote on its outcome with full transparency by using tokens.
 
-If you create a token (`EXAMPLE`), you can create any other tokens (such as EXAMPLEVOTE) and pay distributions of EXAMPLEVOTE to all holders of `EXAMPLE` in one single action. Create a distribution payment and choose EXAMPLEVOTE as the currency to distribute. This way, all holders of `EXAMPLE` will receive EXAMPLEVOTE in the amount you specify.
+If you create a token (`EXAMPLE`), you can create any other tokens (such as EXAMPLEVOTE) and pay dividends of EXAMPLEVOTE to all holders of `EXAMPLE` in one single action. Create a dividend payment and choose EXAMPLEVOTE as the currency to distribute. This way, all holders of `EXAMPLE` will receive EXAMPLEVOTE in the amount you specify.
 
 Now all you need are as many different Dogecoin addresses as there are choices in your poll. For example: one Dogecoin address for yes, one for no. To cast their votes, holders of `EXAMPLE` can then send the EXAMPLEVOTE they have received to whichever address they agree with. The results of the poll will then be public and verifiable on the Dogecoin blockchain, and can be visualized in a [block explorer](https://dogeparty.xchain.io).
