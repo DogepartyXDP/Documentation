@@ -1,0 +1,1 @@
+The bylaws will be determined by the Dogeparty Foundation members after the first foundation election period.
