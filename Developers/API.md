@@ -6,7 +6,7 @@
 ##Overview
 
 ``dogeparty-lib`` provides a JSON RPC 2.0-based API based off of
-that of Bitcoin Core. It is the primary means by which other applications
+that of Dogecoin Core. It is the primary means by which other applications
 should interact with the Dogeparty network.
 
 The API server is started either through the [`CLI interface`](dogeparty-cli.md) or
@@ -16,14 +16,14 @@ with the [`dogeparty-lib`](dogeparty_lib.md) Python library. It listens on port
 The API includes numerous information retrieval methods, most of which begin with `get_`, as well as several
 `create_` methods which create new Dogeparty transactions. While the `get_` type methods simply return the
 requested information, the `create_` methods return unsigned raw transactions which must then be signed and
-broadcast on the Bitcoin network. This means that while `dogeparty-server` requires Bitcoin Core and
-uses it for retieval and parsing of blockchain data, it and this API do not require Bitcoin Core's wallet functionality
+broadcast on the Dogecoin network. This means that while `dogeparty-server` requires Dogecoin Core and
+uses it for retieval and parsing of blockchain data, it and this API do not require Dogecoin Core's wallet functionality
 for private key storage and transaction signing. Transaction signing and broadcast can thus
-be accomplished using whatever means the developer sees fit (including using Bitcoin core's APIs if desired, or
+be accomplished using whatever means the developer sees fit (including using Dogecoin core's APIs if desired, or
 a library like Bitcore, or a service like blockchain.info, and so on).
 
 In addition to the JSON RPC API, ``dogeparty-lib`` provides a complementary RESTful API also based off of that
-of Bitcoin Core's design. This REST API is still under development and will include more functionality
+of Dogecoin Core's design. This REST API is still under development and will include more functionality
 in the future, and listens on the same port as JSON RPC one.
 
 
@@ -343,13 +343,13 @@ This example was created with curl 7.50.1 (x86_64-w64-mingw32) on Windows 10. Fo
 
 ##Signing Transactions Before Broadcasting
 
-**Note:** Before v9.49.4, the dogeparty server API provided an interface to Bitcoin Core's signing functionality through the `do_*`, `sign_tx` and `broadcast_tx` methods, which have all since been removed.
+**Note:** Before v9.49.4, the dogeparty server API provided an interface to Dogecoin Core's signing functionality through the `do_*`, `sign_tx` and `broadcast_tx` methods, which have all since been removed.
 
-All ``create_`` API calls return an *unsigned raw transaction serialization* as a hex-encoded string (i.e. the same format that ``bitcoind`` returns with its raw transaction API calls). This raw transaction's inputs may be validated and then must be signed (i.e. via Bitcoin Core, a 3rd party Bitcoin library like Bitcore, etc) and broadcast on the Bitcoin network.
+All ``create_`` API calls return an *unsigned raw transaction serialization* as a hex-encoded string (i.e. the same format that ``bitcoind`` returns with its raw transaction API calls). This raw transaction's inputs may be validated and then must be signed (i.e. via Dogecoin Core, a 3rd party Dogecoin library like Bitcore, etc) and broadcast on the Dogecoin network.
 
 The process of signing and broadcasting a transaction, from start to finish, depends somewhat on the wallet software used. Below are examples of how one might use a wallet to sign and broadcast an unsigned Dogeparty transaction *created* with this API.
 
-**Bitcoin Core with Python**
+**Dogecoin Core with Python**
 
 	#! /usr/bin/env python3
 
@@ -377,7 +377,7 @@ The process of signing and broadcasting a transaction, from start to finish, dep
 	    tx_hash = bitcoin_api('sendrawtransaction', [signed_tx])
 	    return tx_hash
 
-**Bitcoin Core with Javascript**
+**Dogecoin Core with Javascript**
 (Utilizing the [Counterwallet Bitcore wrapper code](https://raw.githubusercontent.com/DogepartyXCP/counterwallet/master/src/js/util.bitcore.js) for brevity.)
 
     <html>
@@ -390,7 +390,7 @@ The process of signing and broadcasting a transaction, from start to finish, dep
         }
 
         bitcoin_api = function(method, params) {
-            // call Bitcoin Core API method via your prefered method
+            // call Dogecoin Core API method via your prefered method
         }
 
         // generate a passphrase
@@ -413,7 +413,7 @@ The process of signing and broadcasting a transaction, from start to finish, dep
         </script>
     </html>
 
-**Bitcoinjs-lib on javascript, signing a P2SH redeeming transaction**
+**Dogecoinjs-lib on javascript, signing a P2SH redeeming transaction**
 
 ```javascript
 // Assumes NodeJS runtime. Several libraries exist to replace the Buffer class on web browsers
@@ -577,7 +577,7 @@ For example: ``get_balances``, ``get_credits``, ``get_debits`` are all valid API
 **Notes:**
 
   * Please note that the ``get_balances`` API call will not return balances for BTC itself. It only returns balances
-    for XCP and other Dogeparty assets. To get BTC-based balances, use an existing system such as Bitcoin Core, blockchain.info, etc.
+    for XCP and other Dogeparty assets. To get BTC-based balances, use an existing system such as Dogecoin Core, blockchain.info, etc.
 
 
 ###get_asset_info
@@ -744,8 +744,8 @@ Gets some operational parameters for the server.
 
   An object with the following properties:
 
-  - **db_caught_up** (*boolean*): ``true`` if block processing is caught up with the Bitcoin blockchain, ``false`` otherwise.
-  - **bitcoin_block_count** (**integer**): The block height on the Bitcoin network (may not necessarily be the same as ``last_block``, if the server is catching up)
+  - **db_caught_up** (*boolean*): ``true`` if block processing is caught up with the Dogecoin blockchain, ``false`` otherwise.
+  - **bitcoin_block_count** (**integer**): The block height on the Dogecoin network (may not necessarily be the same as ``last_block``, if the server is catching up)
   - **last_block** (*integer*): The index (height) of the last block processed by the server
   - **last_message_index** (*integer*): The index (ID) of the last message in the message feed
   - **running_testnet** (*boolean*): ``true`` if the server is configured for testnet, ``false`` if configured on mainnet.
@@ -1170,7 +1170,7 @@ Each `create_` call detailed below can take the following common keyword paramet
   * **multisig_dust_size** (*integer*): Specify (in satoshi) to override the (dust) amount of BTC used for each (bare) multisig output. Defaults to `7800` satoshi.
   * **dust_return_pubkey** (*string*): The dust return pubkey is used in multi-sig data outputs (as the only real pubkey) to make those the outputs spendable. By default, this pubkey is taken from the pubkey used in the first transaction input. However, it can be overridden here (and is _required_ to be specified if a P2SH input is used and multisig is used as the data output encoding.) If specified, specify the public key (in hex format) where dust will be returned to so that it can be reclaimed. Only valid/useful when used with transactions that utilize multisig data encoding. Note that if this value is set to `false`, this instructs `dogeparty-server` to use the default dust return pubkey configured at the node level. If this default is not set at the node level, the call will generate an exception.
   * **disable_utxo_locks** (*boolean*): By default, UTXO's utilized when creating a transaction are "locked" for a few seconds, to prevent a case where rapidly generating `create_` calls reuse UTXOs due to their spent status not being updated in bitcoind yet. Specify `true` for this parameter to disable this behavior, and not temporarily lock UTXOs.
-  * **op_return_value** (*integer*): The value (in satoshis) to use with any `OP_RETURN` outputs in the generated transaction. Defaults to `0`. Don't use this, unless you like [throwing your money away](https://m.reddit.com/r/Bitcoin/comments/2plfsv/what_happens_to_the_value_of_a_coin_locked_with/cmxrnhu).
+  * **op_return_value** (*integer*): The value (in satoshis) to use with any `OP_RETURN` outputs in the generated transaction. Defaults to `0`. Don't use this, unless you like [throwing your money away](https://m.reddit.com/r/Dogecoin/comments/2plfsv/what_happens_to_the_value_of_a_coin_locked_with/cmxrnhu).
   * **extended_tx_info** (*boolean*): When this is not specified or false, the `create_` calls return only a hex-encoded string.  If this is true, the `create_` calls return a data object with the following keys: `tx_hex`, `btc_in`, `btc_out`, `btc_change`, and `btc_fee`.
   * **p2sh_pretx_txid** (*string*): The previous transaction `txid` for a two part ``P2SH`` message. This `txid` must be taken from the signed transaction.
 
@@ -1184,7 +1184,7 @@ By default the default value of the ``encoding`` parameter detailed above is ``a
    - **OP_RETURN** transactions cannot have more than 80 bytes of data. If you force OP_RETURN encoding and your transaction would have more than this amount, an exception will be generated.
 - To return the transaction as a **multisig** transaction, specify ``multisig`` for the ``encoding`` parameter.
     - ``pubkey`` should be set to the hex-encoded public key of the source address.
-    - Note that with the newest versions of Bitcoin (0.12.1 onward), bare multisig encoding does not reliably propagate. More information on this is documented [here](https://github.com/rubensayshi/dogeparty-lib/pull/9).
+    - Note that with the newest versions of Dogecoin (0.12.1 onward), bare multisig encoding does not reliably propagate. More information on this is documented [here](https://github.com/rubensayshi/dogeparty-lib/pull/9).
 - To return the transaction as a **pubkeyhash** transaction, specify ``pubkeyhash`` for the ``encoding`` parameter.
     - ``pubkey`` should be set to the hex-encoded public key of the source address.
 - To return the transaction as a 2 part **P2SH** transaction, specify ``P2SH`` for the encoding parameter.
@@ -1192,7 +1192,7 @@ By default the default value of the ``encoding`` parameter detailed above is ``a
     - Sign the transaction as usual and broadcast it. It's recommended but not required to wait the transaction to confirm as malleability is an issue here (P2SH isn't yet supported on segwit addresses).
     - The resulting ``txid`` must be passed again on an identic call to the ``create_`` method, but now passing an additional parameter ``p2sh_pretx_txid`` with the value of the previous transaction's id.
     - The resulting transaction is a ``P2SH`` encoded message, using the redeem script on the transaction inputs as data carrying mechanism.
-    - Sign the transaction following the ``Bitcoinjs-lib on javascript, signing a P2SH redeeming transaction`` section
+    - Sign the transaction following the ``Dogecoinjs-lib on javascript, signing a P2SH redeeming transaction`` section
     - **NOTE**: Don't leave pretxs hanging without transmitting the second transaction as this pollutes the UTXO set and risks making bitcoin harder to run on low spec nodes.
 
 
@@ -1269,7 +1269,7 @@ The API calls documented can return any one of these objects.
 
 An object that describes a balance that is associated to a specific address:
 
-* **address** (*string*): A PubkeyHash Bitcoin address, or the pubkey associated with it (in case the address hasn’t sent anything before).
+* **address** (*string*): A PubkeyHash Dogecoin address, or the pubkey associated with it (in case the address hasn’t sent anything before).
 * **asset** (*string*): The ID of the [assets](#assets) in which the balance is specified
 * **quantity** (*integer*): The [quantities](#quantities-and-balances) of the specified asset at this address
 
@@ -1300,9 +1300,9 @@ An object that describes a specific bet:
 
 An object that describes a specific occurance of two bets being matched (either partially, or fully):
 
-* **tx0_index** (*integer*): The Bitcoin transaction index of the initial bet
-* **tx0_hash** (*string*): The Bitcoin transaction hash of the initial bet
-* **tx0_block_index** (*integer*): The Bitcoin block index of the initial bet
+* **tx0_index** (*integer*): The Dogecoin transaction index of the initial bet
+* **tx0_hash** (*string*): The Dogecoin transaction hash of the initial bet
+* **tx0_block_index** (*integer*): The Dogecoin block index of the initial bet
 * **tx0_expiration** (*integer*): The number of blocks over which the initial bet was valid
 * **tx0_address** (*string*): The address that issued the initial bet
 * **tx0_bet_type** (*string*): The type of the initial bet (0 for Bullish CFD (deprecated), 1 for Bearish CFD (deprecated), 2 for Equal, 3 for Not Equal)
@@ -1440,9 +1440,9 @@ An object that describes a specific order:
 
 An object that describes a specific occurance of two orders being matched (either partially, or fully):
 
-* **tx0_index** (*integer*): The Bitcoin transaction index of the first (earlier) order
-* **tx0_hash** (*string*): The Bitcoin transaction hash of the first order
-* **tx0_block_index** (*integer*): The Bitcoin block index of the first order
+* **tx0_index** (*integer*): The Dogecoin transaction index of the first (earlier) order
+* **tx0_hash** (*string*): The Dogecoin transaction hash of the first order
+* **tx0_block_index** (*integer*): The Dogecoin block index of the first order
 * **tx0_expiration** (*integer*): The number of blocks over which the first order was valid
 * **tx0_address** (*string*): The address that issued the first (earlier) order
 * **tx1_index** (*integer*): The transaction index of the second (matching) order
@@ -1603,7 +1603,7 @@ There will be no incompatible API pushes that do not either have:
 
 * \*_issuance: ``callable``, ``call_date`` and ``call_price`` are no longer valid parameters
 * \*_callback: removed
-* Bitcoin addresses may everywhere be replaced by pubkeys.
+* Dogecoin addresses may everywhere be replaced by pubkeys.
 * The API will no longer search the local wallet for pubkeys, so they must be passed to the API manually if being used for the first time. Otherwise, you may get a "<address> not published in blockchain" error.
 
 ##9.43.0
