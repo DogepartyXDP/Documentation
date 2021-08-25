@@ -1,10 +1,10 @@
-# Setting up a Counterparty Node
+# Setting up a Dogeparty Node
 
 ## Introduction
 
-This document describes how one can set up their own Counterparty "Federated Node" system, on Linux, Windows or OS X.
+This document describes how one can set up their own Dogeparty "Federated Node" system, on Linux, Windows or OS X.
 
-A Federated Node is a self-contained system that runs the some or all of the Counterparty software stack, via Docker. Each system operates as a Bitcoin and Counterparty "full node". Using this toolset, one can generally get started running the Counterparty software much quicker and more easily than a manual installation of the various components.
+A Federated Node is a self-contained system that runs the some or all of the Dogeparty software stack, via Docker. Each system operates as a Dogecoin and Dogeparty "full node". Using this toolset, one can generally get started running the Dogeparty software much quicker and more easily than a manual installation of the various components.
 
 The document is primarily intended for power users and developers.
 
@@ -12,25 +12,25 @@ The document is primarily intended for power users and developers.
 <a name="services"></a>
 Services run on a Federated Node include some or all of the following:
 
-* **counterparty-server**: `counterparty-lib` + `counterparty-cli`. Implements support for the core Counterparty protocol, via a provided REST API and command line interface.
-* **counterblock**: Provides additional services (required by `counterwallet` and potentially other services) beyond those offered in the API provided by `counterparty-server`. It features a full-fledged JSON RPC-based API, and has an extensible architecture to support custom plugins.
-* **counterwallet**: The reference Web wallet for Counterparty. This is a collection of HTML, CSS and javascript resources, served by `nginx`.
-* **bitcoind**: Reference Bitcoin implementation, used by `counterparty-server` to sync to the Bitcoin blockchain.
-* **addrindexrs**: Bitcoin address index service. Maintains an updated database of UTXOs for usage in the counterparty services.
-* **armory_utxsvr**: A service used by ``counterblock`` with Counterwallet to support [Offline Armory transactions](http://counterparty.io/docs/create_armory_address/). This service requires Armory itself, which is automatically installed as part of the Federated Node setup procedure.
-* **nginx**: Reverse proxies `counterwallet` access. Not used with `counterparty-server`-only or `counterblock`-only nodes.
-* **mongodb and redis**: Used by `counterblock`.
+* **dogeparty-server**: `dogeparty-lib` + `dogeparty-cli`. Implements support for the core Dogeparty protocol, via a provided REST API and command line interface.
+* **dogeblock**: Provides additional services (required by `dogewallet` and potentially other services) beyond those offered in the API provided by `dogeparty-server`. It features a full-fledged JSON RPC-based API, and has an extensible architecture to support custom plugins.
+* **dogewallet**: The reference Web wallet for Dogeparty. This is a collection of HTML, CSS and javascript resources, served by `nginx`.
+* **bitcoind**: Reference Dogecoin implementation, used by `dogeparty-server` to sync to the Dogecoin blockchain.
+* **addrindexrs**: Dogecoin address index service. Maintains an updated database of UTXOs for usage in the dogeparty services.
+* **armory_utxsvr**: A service used by ``dogeblock`` with Counterwallet to support [Offline Armory transactions](http://dogeparty.io/docs/create_armory_address/). This service requires Armory itself, which is automatically installed as part of the Federated Node setup procedure.
+* **nginx**: Reverse proxies `dogewallet` access. Not used with `dogeparty-server`-only or `dogeblock`-only nodes.
+* **mongodb and redis**: Used by `dogeblock`.
 
 Please note that Federated Node should not be installed on a system which already has one or more of conflicting services running on the ports used by Federated Node. The Federated Node install script checks that required ports are unused and exits to avoid conflict. If you have a non-essential Web, mongodb or other service running on the target system you can disable them or bind them to a different port to be able to pass the built-in check and avoid application conflicts.
 
 ### Hardware / OS requirements
 <a name="requirements"></a>
 
-- **Memory**: 4GB RAM (`bitcoind`, `counterparty-server` only), 8GB+ RAM (full stack)
+- **Memory**: 4GB RAM (`bitcoind`, `dogeparty-server` only), 8GB+ RAM (full stack)
 - **Disk space:** The exact disk space required will be dependent on what services are run on the node:
     - For ``bitcoin`` databases: **~361GB** (mainnet), **~32GB** (testnet)
     - For ``addrindexrs`` database: **~63GB** (mainnet), **~6GB** (testnet)
-    - For ``counterparty`` databases: **~5GB** (mainnet), **~1GB** (testnet)
+    - For ``dogeparty`` databases: **~5GB** (mainnet), **~1GB** (testnet)
     - For ``armory_utxsvr``: **~291GB** (mainnet), **~26GB** (testnet)
 - **OS:** *Please note that Ubuntu Linux is the recommended OS at this time, as most of our testing is performed on it. Windows and OS X support is considered in BETA.*
     - **Linux**: We recommend Ubuntu 20.10 64-bit, but other, modern versions of Linux should work, as long as they support the newest released version of Docker
@@ -41,7 +41,7 @@ Please note that Federated Node should not be installed on a system which alread
 
 ### Windows
 
-**NOTE**: Installation on Windows is still in *BETA* state, and we cannot promise a fully-working environment. [Please report](https://github.com/CounterpartyXCP/federatednode/issues) any bugs you find.
+**NOTE**: Installation on Windows is still in *BETA* state, and we cannot promise a fully-working environment. [Please report](https://github.com/DogepartyXCP/federatednode/issues) any bugs you find.
 
 * **Python 3.5.x**: [Download and install](https://www.python.org/downloads/) the latest Python 3.5.x release. Make sure you check the box "Add Python 3.5 to PATH" on the first page. (If you get an error during installation, make sure your windows system is fully updated via Windows Update.)
 * **Docker**: If using Windows 10, we recommend to [install Docker for Windows](https://docs.docker.com/engine/installation/windows/). For all other versions of Windows, [install Docker Toolbox](https://docs.docker.com/toolbox/toolbox_install_windows/).
@@ -105,38 +105,38 @@ On Linux and OS X, install as a non-root sudo-er from home directory.
 
 On all OS, clone federatednode repo and enter cloned directory:
 ```
-git clone https://github.com/CounterpartyXCP/federatednode.git
+git clone https://github.com/DogepartyXCP/federatednode.git
 cd federatednode
 ```
 
 On Linux and OS X:
 ```
-sudo ln -sf `pwd`/fednode.py /usr/local/bin/fednode
+sudo ln -sf `pwd`/dogenode.py /usr/local/bin/dogenode
 ```
 
 On Windows (if using Docker Quickstart Terminal, a.k.a MINGW64):
 ```
 mkdir ~/bin
-echo "python.exe \"`pwd`\\fednode.py\" \$*" > ~/bin/fednode
-chmod +x ~/bin/fednode
+echo "python.exe \"`pwd`\\dogenode.py\" \$*" > ~/bin/dogenode
+chmod +x ~/bin/dogenode
 ```
 
 On Windows (if using Windows Command prompt):
 ```
-> C:\Windows\fednode.bat echo python.exe %CD%\fednode.py \%*
+> C:\Windows\dogenode.bat echo python.exe %CD%\dogenode.py \%*
 ```
 
 **Build and link the containers**
 
 Run the following command:
 ```
-fednode install <CONFIG> <BRANCH>
+dogenode install <CONFIG> <BRANCH>
 ```
 
 Where `<CONFIG>` is one of the following:
 
-* **`base`** if you want to run `counterparty-server` and `bitcoind` only
-* **`counterblock`** if you want to run everything in `base`, with the addition of `counterblock` and its dependencies (`mongodb` and `redis`)
+* **`base`** if you want to run `dogeparty-server` and `bitcoind` only
+* **`dogeblock`** if you want to run everything in `base`, with the addition of `dogeblock` and its dependencies (`mongodb` and `redis`)
 * **`full`** if you would like to run a *full federated node configuration*, which is all services on the [list above](#services)
 
 And where `<BRANCH>` is one of the following:
@@ -147,48 +147,48 @@ And where `<BRANCH>` is one of the following:
 For example:
 ```
 # install a base configuration for the master branch
-fednode install base master
+dogenode install base master
 
 # install a full configuration for the develop branch
-fednode install full develop
+dogenode install full develop
 ```
 In some cases (slow host, limited bandwidth), you may experience a failure to install due to download timeouts which happen because of network unstability. In that case consider changing Docker's `max-concurrent-downloads` value to 1 or 2 from default 3. To do that create a custom `/etc/docker/daemon.json` daemon options file and restart Docker service.
 
 As mentioned earlier, the install script may stop if ports used by Federated Node services are used by other applications. While it is not recommended to run Federated Node alongside production services, small changes can make the evaluation of Federated Node easier. For example you may change ports used by existing applications (or disable said applications) or run Federated Node inside of a virtual machine.
 
-For example, the original mongodb can be reconfigured to listen on port 28018 and counterblock's mongodb can use the default port 27017. The Federated Node install script makes it possible to specify the interface used by its mongodb container (example below), but it currently does not have the ability to do this for other services or get around port conflicts.
+For example, the original mongodb can be reconfigured to listen on port 28018 and dogeblock's mongodb can use the default port 27017. The Federated Node install script makes it possible to specify the interface used by its mongodb container (example below), but it currently does not have the ability to do this for other services or get around port conflicts.
 
 ```
-fednode install --mongodb-interface 127.0.0.2 counterblock master
+dogenode install --mongodb-interface 127.0.0.2 dogeblock master
 ```
 
 **Wait for initial sync**
 
 After installation, the services will be automatically started. To check the status, issue:
 ```
-fednode ps
+dogenode ps
 ```
 
-If you have existing instances of Bitcoin Core (either mainnet or testnet), at this point you could stop all services listed in `fednode ps` output, change configuration files (of counterparty and counterblock, for example) and point them to your existing Bitcoin Core. Configuration files can be found in various service directories located under federatednode/config.
+If you have existing instances of Dogecoin Core (either mainnet or testnet), at this point you could stop all services listed in `dogenode ps` output, change configuration files (of dogeparty and dogeblock, for example) and point them to your existing Dogecoin Core. Configuration files can be found in various service directories located under federatednode/config.
 
-Once the containers are installed and running, keep in mind that it will take some time for `bitcoind` to download the blockchain data. Once this is done, `counterparty-server` will fully start and sync, followed by `counterblock` (if in use). At that point, the server will be usable.
+Once the containers are installed and running, keep in mind that it will take some time for `bitcoind` to download the blockchain data. Once this is done, `dogeparty-server` will fully start and sync, followed by `dogeblock` (if in use). At that point, the server will be usable.
 
-You may check the sync status by tailing the appropriate service logs, e.g. for Bitcoin Core and Counterparty server on mainnet:
+You may check the sync status by tailing the appropriate service logs, e.g. for Dogecoin Core and Dogeparty server on mainnet:
 ```
-fednode tail bitcoin
-fednode tail counterparty
+dogenode tail bitcoin
+dogenode tail dogeparty
 ```
 
 <a name="accessing"></a>**Access the system**
 
 Once running, the system listens on the following ports:
 
-* `counterparty-server`: 4000/tcp (mainnet), 14000/tcp (testnet)
-* `counterblock`: 4001/tcp (mainnet), 14001/tcp (testnet)
+* `dogeparty-server`: 4000/tcp (mainnet), 14000/tcp (testnet)
+* `dogeblock`: 4001/tcp (mainnet), 14001/tcp (testnet)
 
-For `counterparty-server`, use RPC username `rpc` and default password `rpc`.
+For `dogeparty-server`, use RPC username `rpc` and default password `rpc`.
 
-If `counterwallet` is installed, access to the following URLs will be possible:
+If `dogewallet` is installed, access to the following URLs will be possible:
 
 * `http://<host>/` — directs to `https`
 * `https://<host>/` - main production URL (uses minified JS/CSS)
@@ -208,9 +208,9 @@ cd extras/host_security
 sudo ./run.py
 ```
 
-Note that this script will make several modifications to your host system as it runs. Please review what it does [here](https://github.com/CounterpartyXCP/federatednode/blob/master/extras/host_security/run.py) before using it.
+Note that this script will make several modifications to your host system as it runs. Please review what it does [here](https://github.com/DogepartyXCP/federatednode/blob/master/extras/host_security/run.py) before using it.
 
-If you expect to run a busy Federated Node that requires counterblock, you can consider making the following performance tweaks for mongodb and redis. Please do not make these changes to the host if you're not comfortable with them because they impact not only Docker but the entire OS.
+If you expect to run a busy Federated Node that requires dogeblock, you can consider making the following performance tweaks for mongodb and redis. Please do not make these changes to the host if you're not comfortable with them because they impact not only Docker but the entire OS.
 
 * Disable huge memory pages (for redis and mongodb): on Ubuntu 16.04 add `echo "never" > /sys/kernel/mm/transparent_hugepage/enabled` to /etc/rc.local and run `sudo systemctl enable rc-local.service`. Reboot and check with `cat /sys/kernel/mm/transparent_hugepage/enabled` (expected setting: `[never]`).
 * Edit /etc/sysctl.conf (for redis): add `net.core.somaxconn = 511` and `vm.overcommit_memory = 1` and run `sudo sysctl -p`.
@@ -221,25 +221,25 @@ If you expect to run a busy Federated Node that requires counterblock, you can c
 
 To check the status of the containers, run:
 ```
-fednode ps
+dogenode ps
 ```
 
 **Modifying configurations**
 
-Configuration files for the `bitcoin`, `counterparty` and `counterblock` services are stored under `federatednode/config/` and may be freely edited. The various locations are as follows:
+Configuration files for the `bitcoin`, `dogeparty` and `dogeblock` services are stored under `federatednode/config/` and may be freely edited. The various locations are as follows:
 
 * `bitcoin`: See `federatednode/config/bitcoin/bitcoin.conf`
 * `bitcoin-testnet`: See `federatednode/config/bitcoin/bitcoin.testnet.conf`
-* `counterparty`: See `federatednode/config/counterparty/server.conf`
-* `counterparty-testnet`: See `federatednode/config/counterparty/server.testnet.conf`
-* `counterblock`: See `federatednode/config/counterblock/server.conf`
-* `counterblock-testnet`: See `federatednode/config/counterblock/server.testnet.conf`
+* `dogeparty`: See `federatednode/config/dogeparty/server.conf`
+* `dogeparty-testnet`: See `federatednode/config/dogeparty/server.testnet.conf`
+* `dogeblock`: See `federatednode/config/dogeblock/server.conf`
+* `dogeblock-testnet`: See `federatednode/config/dogeblock/server.testnet.conf`
 * `redis`: shared service used for both mainnet and testnet
 * `mongodb`: shared service used for both mainnet and testnet
 
 Remember: once done editing a configuration file, you must `restart` the corresponding service. Also, please don't change port or usernames/passwords if the configuration files unless you know what you are doing (as the services are coded to work together smoothly with specific values).
 
-For example, a user with base setup (Bitcoin Core & Counterparty Server) could make Counterparty use existing Bitcoin Core by changing configuration files found under federatednode/config/counterparty/ (`backend-connect` in Counterparty server configuration files and `wallet-connect` in client configuration files.) At this point Bitcoin Core (mainnet and/or testnet) container(s) could be stopped and counterparty server container restarted. If your existing Bitcoin Server allows RPC connections, with proper settings and correct RPC credentials in their configuration files, counterparty (server), counterblock and counterwallet can all use it so that you don't have to run bitcoin or bitcoin-testnet container.
+For example, a user with base setup (Dogecoin Core & Dogeparty Server) could make Dogeparty use existing Dogecoin Core by changing configuration files found under federatednode/config/dogeparty/ (`backend-connect` in Dogeparty server configuration files and `wallet-connect` in client configuration files.) At this point Dogecoin Core (mainnet and/or testnet) container(s) could be stopped and dogeparty server container restarted. If your existing Dogecoin Server allows RPC connections, with proper settings and correct RPC credentials in their configuration files, dogeparty (server), dogeblock and dogewallet can all use it so that you don't have to run bitcoin or bitcoin-testnet container.
 
 **Viewing/working with stored data**
 
@@ -247,9 +247,9 @@ The various services use [Docker named volumes](https://docs.docker.com/engine/t
 
 * `bitcoin` and `bitcoin-testnet`: Stores blockchain data in the `federatednode_bitcoin-data` volume
 * `addrindexrs` and `addrindexrs-testnet`: Stores index data in the `federatednode_addrindexrs-data` volume
-* `counterparty` and `counterparty-testnet`: Stores Counterparty databases in the `federatednode_counterparty-data` volume
-* `counterblock` and `counterblock-testnet`: Stores Counterblock asset info (images), etc in the `federatednode_counterblock-data` volume
-* `mongodb`: Stores the databases for `counterblock` and `counterblock-testnet` in the `federatednode_mongodb-data` volume
+* `dogeparty` and `dogeparty-testnet`: Stores Dogeparty databases in the `federatednode_dogeparty-data` volume
+* `dogeblock` and `dogeblock-testnet`: Stores Counterblock asset info (images), etc in the `federatednode_dogeblock-data` volume
+* `mongodb`: Stores the databases for `dogeblock` and `dogeblock-testnet` in the `federatednode_mongodb-data` volume
 
 Use `docker volume inspect <volume-name>` to display volume location. See `docker volume --help` for help on how to interact with Docker volumes.
 
@@ -257,59 +257,59 @@ Use `docker volume inspect <volume-name>` to display volume location. See `docke
 
 To tail the logs, use the following command:
 ```
-fednode tail <service>
+dogenode tail <service>
 ```
 
 Or, to view the entire log, run:
 ```
-fednode logs <service>
+dogenode logs <service>
 ```
 
 <a name="servicenames"></a>Where `<service>` may be one the following, or blank to tail all services:
 
-* `counterparty` (`counterparty-server` mainnet)
-* `counterblock` (`counterblock` mainnet)
+* `dogeparty` (`dogeparty-server` mainnet)
+* `dogeblock` (`dogeblock` mainnet)
 * `bitcoin` (`bitcoin` mainnet)
 * `addrindexrs` (`addrindexrs` mainnet)
 * `armory_utxsvr` (`armory_utxsvr` mainnet)
-* `counterparty-testnet`
-* `counterblock-testnet`
+* `dogeparty-testnet`
+* `dogeblock-testnet`
 * `bitcoin-testnet`
 * `addrindexrs-testnet`
 * `armory_utxsvr-testnet`
-* `counterwallet`
+* `dogewallet`
 
 **Stopping and restarting containers**
 
 ```
-fednode stop <service>
-fednode start <service>
-fednode restart <service>
+dogenode stop <service>
+dogenode start <service>
+dogenode restart <service>
 ```
 
 Where `<service>` is one of the service names listed [above](#servicenames), or blank for all services.
 
-Note that redis and mongodb are shared services and need to run if either (mainnet or testnet) counterblock container is running and shut down only if both counterblock containers are not running.
+Note that redis and mongodb are shared services and need to run if either (mainnet or testnet) dogeblock container is running and shut down only if both dogeblock containers are not running.
 
 **Issuing a single shell command**
 
 ```
-fednode exec <service> <CMD>
+dogenode exec <service> <CMD>
 ```
 
 Where `<service>` is one of the service names listed [above](#servicenames), and `<CMD>` is an arbitrary shell command.
 
 For example:
 ```
-fednode exec counterparty counterparty-client send --source=12u4Vymr3bGTywjMQDgBkwAnazwQuDqzJG --destination=1AanCo9CJSomhUEy2YrhfXrU1PboBhFaBq --quantity=1.5 --asset=XCP
-fednode exec bitcoin-testnet bitcoin-cli getpeerinfo
-fednode exec counterblock ls /root
+dogenode exec dogeparty dogeparty-client send --source=12u4Vymr3bGTywjMQDgBkwAnazwQuDqzJG --destination=1AanCo9CJSomhUEy2YrhfXrU1PboBhFaBq --quantity=1.5 --asset=XCP
+dogenode exec bitcoin-testnet bitcoin-cli getpeerinfo
+dogenode exec dogeblock ls /root
 ```
 
 **Getting a shell in a conainer**
 
 ```
-fednode shell <service>
+dogenode shell <service>
 ```
 
 Where `<service>` is one of the service names listed [above](#servicenames).
@@ -320,70 +320,70 @@ Where `<service>` is one of the service names listed [above](#servicenames).
 To pull the newest software from the git repositories and restart the appropriate daemon, issue the following command:
 
 ```
-fednode update <service>
+dogenode update <service>
 ```
 
 <a name="servicenames_code"></a>Where `<service>` is one of the following, or blank for all applicable services:
 
-* `counterparty`
-* `counterparty-testnet`
-* `counterblock`
-* `counterblock-testnet`
+* `dogeparty`
+* `dogeparty-testnet`
+* `dogeblock`
+* `dogeblock-testnet`
 * `armory_utxsvr`
 * `armory_utxsvr-testnet`
-* `counterwallet`
+* `dogewallet`
 
 **Reparsing blockchain data**
 
-Both `counterparty-server` and `counterblock` read in blockchain data and construct their own internal databases. To reset these databases and trigger a reparse of this blockchain data for one of the services, run:
+Both `dogeparty-server` and `dogeblock` read in blockchain data and construct their own internal databases. To reset these databases and trigger a reparse of this blockchain data for one of the services, run:
 
 ```
-fednode reparse <service>
+dogenode reparse <service>
 ```
 
-Where service is `counterparty`, `counterparty-testnet`, `counterblock`, or `counterblock-testnet`.
+Where service is `dogeparty`, `dogeparty-testnet`, `dogeblock`, or `dogeblock-testnet`.
 
 **Rebuilding a service container**
 
 As a more extensive option, if you want to remove, rebuild and reinstall a container (downloading the newest container image/`Dockerfile` and utilizing that):
 
 ```
-fednode rebuild <service>
+dogenode rebuild <service>
 ```
 
 Where `<service>` is one of the service names listed [earlier](#servicenames), or blank for all services. Note that you are just looking to update the source code and restart the service, `update` is a better option.
 
 **Uninstalling**
 
-To uninstall the entire fednode setup, run:
+To uninstall the entire dogenode setup, run:
 
 ```
-fednode uninstall
+dogenode uninstall
 ```
 
 ## Component development
 
-The system allows for easy development and modification of the Counterparty software components. To do so, simply update code in the directories under `federatednode/src/` as you see fit. These directories are mapped into the appropriate containers, overlaying (overriding) the source code that the container ships with. This, along with symlinked (develop) Python package installations makes it possible to work on code in-place, with just a service restart necessary to have the changes take effect.
+The system allows for easy development and modification of the Dogeparty software components. To do so, simply update code in the directories under `federatednode/src/` as you see fit. These directories are mapped into the appropriate containers, overlaying (overriding) the source code that the container ships with. This, along with symlinked (develop) Python package installations makes it possible to work on code in-place, with just a service restart necessary to have the changes take effect.
 
 Once done updating the source code for a particular service, issue the following command(s) to restart the container with the new code:
 ```
-fednode restart <service>
+dogenode restart <service>
 ```
 Where `<service>` is one of the services mentioned [here](#servicenames_code).
 
 **Other Developer Notes**
 
-* To run the `counterparty-lib` test suite, execute:
+* To run the `dogeparty-lib` test suite, execute:
 ```
-fednode exec counterparty "cd /counterparty-lib/counterpartylib; py.test --verbose --skiptestbook=all --cov-config=../.coveragerc --cov-report=term-missing --cov=./"
+dogenode exec dogeparty "cd /dogeparty-lib/dogepartylib; py.test --verbose --skiptestbook=all --cov-config=../.coveragerc --cov-report=term-missing --cov=./"
 ```
-* If you are working on `counterwallet`, you should browse the system using the `/src/` subdirectory (e.g. `https://mycounterwallet.bla/src/`). This avoids using precompiled sources. Once you are happy with your changes and ready to make them available to everyone that hits the server, run `fednode update counterwallet`, which will pull the newest repo code and repackage the web assets so that the code updates are then active from `https://mycounterwallet.bla/`.
+* If you are working on `dogewallet`, you should browse the system using the `/src/` subdirectory (e.g. `https://mydogewallet.bla/src/`). This avoids using precompiled sources. Once you are happy with your changes and ready to make them available to everyone that hits the server, run `dogenode update dogewallet`, which will pull the newest repo code and repackage the web assets so that the code updates are then active from `https://mydogewallet.bla/`.
 
-* Note that when you install the federated node system, HTTPS repository URLs are used by default for all of the repositories checked out under `src` by `fednode.py`. To use SSH URIs instead, specify the `--use-ssh-uris` to the `fednode install` command.
+* Note that when you install the federated node system, HTTPS repository URLs are used by default for all of the repositories checked out under `src` by `dogenode.py`. To use SSH URIs instead, specify the `--use-ssh-uris` to the `dogenode install` command.
 
 ## Counterwallet-Specific
 
-If you are setting up a Counterwallet server, you will next need to create a `counterwallet.conf.json` configuration file.
+If you are setting up a Counterwallet server, you will next need to create a `dogewallet.conf.json` configuration file.
 Instructions for doing that are detailed in the *Counterwallet Configuration File* section later in this document. Once creating this file, open up a web browser, and go to the IP address/hostname of the server. You will then be presented to accept your self-signed SSL certificate, and after doing that, should see the Counterwallet login screen.
 
 ### Getting a SSL Certificate
@@ -392,7 +392,7 @@ By default, the system is set up to use a self-signed SSL certificate. If you ar
 you should get your own SSL certificate from your DNS registrar so that your users don't see a certificate warning when
 they visit your site.
 
-Once you have that certificate, create a nginx-compatible ``.pem`` file. Copy that `.pem` file to `federatednode/config/counterwallet/ssl/counterwallet.pem` and the cooresponding certificate `.key` file to `federatednode/config/counterwallet/ssl/counterwallet.key`. (Note that there will be a `counterwallet.key` and `counterwallet.pem` file already there, which are the default, self-signed certificates, and can be safely overridden.) Then, restart the `counterwallet` service for the new certificate to take effect.
+Once you have that certificate, create a nginx-compatible ``.pem`` file. Copy that `.pem` file to `federatednode/config/dogewallet/ssl/dogewallet.pem` and the cooresponding certificate `.key` file to `federatednode/config/dogewallet/ssl/dogewallet.key`. (Note that there will be a `dogewallet.key` and `dogewallet.pem` file already there, which are the default, self-signed certificates, and can be safely overridden.) Then, restart the `dogewallet` service for the new certificate to take effect.
 
 
 ### Monitoring the Server
@@ -405,32 +405,32 @@ The federated node allows these (and any other monitoring service) to query the 
 
 If all services are up, a HTTP 200 response with the following data will be returned:
 
-    {"counterparty-server": "OK", "counterblock_ver": "1.3.0", "counterparty-server_ver": "9.31.0", "counterblock": "OK",
-    "counterblock_check_elapsed": 0.0039348602294921875, "counterparty-server_last_block": {
+    {"dogeparty-server": "OK", "dogeblock_ver": "1.3.0", "dogeparty-server_ver": "9.31.0", "dogeblock": "OK",
+    "dogeblock_check_elapsed": 0.0039348602294921875, "dogeparty-server_last_block": {
     "block_hash": "0000000000000000313c4708da5b676f453b41d566832f80809bc4cb141ab2cd", "block_index": 311234,
-    "block_time": 1405638212}, "local_online_users": 7, "counterparty-server_check_elapsed": 0.003687143325805664,
-    "counterblock_error": null, "counterparty-server_last_message_index": 91865}
+    "block_time": 1405638212}, "local_online_users": 7, "dogeparty-server_check_elapsed": 0.003687143325805664,
+    "dogeblock_error": null, "dogeparty-server_last_message_index": 91865}
 
-Note the ``"counterparty-server": "OK"`` and ``"counterblock": "OK"`` items.
+Note the ``"dogeparty-server": "OK"`` and ``"dogeblock": "OK"`` items.
 
-If all services but ``counterparty-server`` are up, a HTTP 500 response with ``"counterparty-server": "NOT OK"``, for instance.
+If all services but ``dogeparty-server`` are up, a HTTP 500 response with ``"dogeparty-server": "NOT OK"``, for instance.
 
-If ``counterblock`` is not working properly, ``nginx`` will return a HTTP 503 (Gateway unavailable) or 500 response.
+If ``dogeblock`` is not working properly, ``nginx`` will return a HTTP 503 (Gateway unavailable) or 500 response.
 
 If ``nginx`` is not working properly, either a HTTP 5xx response, or no response at all (i.e. timeout) will be returned.
 
 
 ### Creating a configuration file
 
-Counterwallet can be configured via editing the `counterwallet.conf.json` file, via issuing the following command:
+Counterwallet can be configured via editing the `dogewallet.conf.json` file, via issuing the following command:
 ```
-sudo docker exec -it federatednode_counterwallet_1 vim /counterwallet/counterwallet.conf.json
+sudo docker exec -it federatednode_dogewallet_1 vim /dogewallet/dogewallet.conf.json
 ```
 
 This file will contain a valid JSON-formatted object, containing an a number of possible configuration properties. For example::
 
     {
-      "servers": [ "counterblock1.mydomain.com", "counterblock2.mydomain.com", "counterblock3.mydomain.com" ],
+      "servers": [ "dogeblock1.mydomain.com", "dogeblock2.mydomain.com", "dogeblock3.mydomain.com" ],
       "forceTestnet": true,
       "googleAnalyticsUA": "UA-48454783-2",
       "googleAnalyticsUA-testnet": "UA-48454783-4",
@@ -463,5 +463,5 @@ If you just want to use the current server (and don't have a multi-server setup)
 * **restrictedAreas**: Set to an object containing a specific page path as the key (or "dividend" for dividend functionality),
   and a list of one or more ISO 2-letter country codes as the key value, to allow for country-level blacklisting of pages/features.
 
-Once done, save this file and make sure it exists on all servers you are hosting Counterwallet static content on, and restart the `counterwallet` service. Now, when you go to your Counterwallet site, the server will read in this file immediately after loading the page, and set the list of
+Once done, save this file and make sure it exists on all servers you are hosting Counterwallet static content on, and restart the `dogewallet` service. Now, when you go to your Counterwallet site, the server will read in this file immediately after loading the page, and set the list of
 backend API hosts from it automatically.
