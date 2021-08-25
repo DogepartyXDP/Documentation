@@ -1,35 +1,35 @@
-# counterparty-server API
+# dogeparty-server API
 
 [TOC]
 
 
 ##Overview
 
-``counterparty-lib`` provides a JSON RPC 2.0-based API based off of
+``dogeparty-lib`` provides a JSON RPC 2.0-based API based off of
 that of Bitcoin Core. It is the primary means by which other applications
-should interact with the Counterparty network.
+should interact with the Dogeparty network.
 
-The API server is started either through the [`CLI interface`](counterparty-cli.md) or
-with the [`counterparty-lib`](counterparty_lib.md) Python library. It listens on port
-4000 by default (14000 for ``testnet``) and requires HTTP Basic Authentication to connect.
+The API server is started either through the [`CLI interface`](dogeparty-cli.md) or
+with the [`dogeparty-lib`](dogeparty_lib.md) Python library. It listens on port
+4005 by default (14005 for ``testnet``) and requires HTTP Basic Authentication to connect.
 
 The API includes numerous information retrieval methods, most of which begin with `get_`, as well as several
-`create_` methods which create new Counterparty transactions. While the `get_` type methods simply return the
+`create_` methods which create new Dogeparty transactions. While the `get_` type methods simply return the
 requested information, the `create_` methods return unsigned raw transactions which must then be signed and
-broadcast on the Bitcoin network. This means that while `counterparty-server` requires Bitcoin Core and
+broadcast on the Bitcoin network. This means that while `dogeparty-server` requires Bitcoin Core and
 uses it for retieval and parsing of blockchain data, it and this API do not require Bitcoin Core's wallet functionality
 for private key storage and transaction signing. Transaction signing and broadcast can thus
 be accomplished using whatever means the developer sees fit (including using Bitcoin core's APIs if desired, or
 a library like Bitcore, or a service like blockchain.info, and so on).
 
-In addition to the JSON RPC API, ``counterparty-lib`` provides a complementary RESTful API also based off of that
+In addition to the JSON RPC API, ``dogeparty-lib`` provides a complementary RESTful API also based off of that
 of Bitcoin Core's design. This REST API is still under development and will include more functionality
 in the future, and listens on the same port as JSON RPC one.
 
 
 ##Getting Started
 
-By default, the server will listen on port ``4000`` (if on mainnet) or port ``14000`` (on testnet) for API
+By default, the server will listen on port ``4005`` (if on mainnet) or port ``14005`` (on testnet) for API
 requests.
 
 Note that the main API is built on JSON-RPC 2.0, not 1.1. JSON-RPC itself is pretty lightweight, and API requests
@@ -78,7 +78,7 @@ if a password is set. **The default user is ``'rpc'``.**
 
 The following examples have authentication enabled and the `user` set to its
 default value of `'rpc'`. The password is not set (default: `'rpc'`). Ensure
-these values correspond to values in your counterparty-server's configuration
+these values correspond to values in your dogeparty-server's configuration
 file `'server.conf'`.
 
 Submissions of examples in additional languages are welcome!
@@ -89,7 +89,7 @@ Submissions of examples in additional languages are welcome!
     import requests
     from requests.auth import HTTPBasicAuth
 
-    url = "http://localhost:4000/api/"
+    url = "http://localhost:4005/api/"
     headers = {'content-type': 'application/json'}
     auth = HTTPBasicAuth('rpc', PASSWORD)
 
@@ -111,7 +111,7 @@ library.
     <?php
     require 'JsonRPC/src/JsonRPC/Client.php';
     use JsonRPC\Client;
-    $client = new Client('http://localhost:4000/api/');
+    $client = new Client('http://localhost:4005/api/');
     $client->authentication('rpc', PASSWORD);
 
     $result = $client->execute('get_balances', array('filters' => array('field' => 'address', 'op' => '==', 'value' => '1NFeBp9s5aQ1iZ26uWyiK2AYUXHxs7bFmB')));
@@ -129,19 +129,19 @@ Remember to surround non-numeric parameter values with the double quotes, as per
 
 ####Linux
 
-    curl -X POST http://127.0.0.1:4000/api/ --user rpc:$PASSWORD -H 'Content-Type: application/json; charset=UTF-8' -H 'Accept: application/json, text/javascript' --data-binary '{ "jsonrpc": "2.0", "id": 0, "method": "get_running_info" }'
+    curl -X POST http://127.0.0.1:4005/api/ --user rpc:$PASSWORD -H 'Content-Type: application/json; charset=UTF-8' -H 'Accept: application/json, text/javascript' --data-binary '{ "jsonrpc": "2.0", "id": 0, "method": "get_running_info" }'
 
 ####Windows
 
 On Windows, depending on implementation the above curl command may need to be formatted differently due to problems that Windows has with escapes. For example this particular format was found to work with curl 7.50.1 (x86_64-w64-mingw32) on Windows 10 (x64).
 
-    curl -X POST http://127.0.0.1:4000/api/ --user rpc:$PASSWORD -H "Content-Type: application/json; charset=UTF-8" -H "Accept: application/json, text/javascript" --data-binary "{ \"jsonrpc\": \"2.0\", \"id\": 0, \"method\": \"get_running_info\" }"
+    curl -X POST http://127.0.0.1:4005/api/ --user rpc:$PASSWORD -H "Content-Type: application/json; charset=UTF-8" -H "Accept: application/json, text/javascript" --data-binary "{ \"jsonrpc\": \"2.0\", \"id\": 0, \"method\": \"get_running_info\" }"
 
 ###c# (RestSharp)
 
 Authorization string in the example below is based on the default username/password.
 
-    var client = new RestClient("http://127.0.0.1:4000/api/");
+    var client = new RestClient("http://127.0.0.1:4005/api/");
     var request = new RestRequest(Method.POST);
     request.AddHeader("cache-control", "no-cache");
     request.AddHeader("authorization", "Basic cnBjOjEyMzQ=");
@@ -164,7 +164,7 @@ Authorization string in the example below is based on the default username/passw
 
     func main() {
 
-    	url := "http://127.0.0.1:4000/api/"
+    	url := "http://127.0.0.1:4005/api/"
 
     	payload := strings.NewReader("{\r\n  \"method\": \"get_running_info\",\r\n  \"params\": {},\r\n  \"jsonrpc\": \"2.0\",\r\n  \"id\": 1\r\n}")
 
@@ -191,7 +191,7 @@ Authorization string in the example below is based on the default username/passw
     require 'uri'
     require 'net/http'
 
-    url = URI("http://127.0.0.1:4000/api/")
+    url = URI("http://127.0.0.1:4005/api/")
 
     http = Net::HTTP.new(url.host, url.port)
 
@@ -213,7 +213,7 @@ The following examples don't use authentication as with default settings.
 
     import requests
 
-    url = "http://localhost:4000/rest/"
+    url = "http://localhost:4005/rest/"
     headers = {'content-type': 'application/json'}
 
     query = 'sends/get?source=mn6q3dS2EnDUx3bmyWc6D4szJNVGtaR7zc&destination=mtQheFaSfWELRB2MyMBaiWjdDm6ux9Ezns&op=AND'
@@ -228,13 +228,13 @@ These examples use the default username/password combination in URL.
 
 ####Linux
 
-    curl "http://rpc:rpc@127.0.0.1:4000/rest/sends/get?source=1B6ahDHnKtZ5GXqytHSxfcXgNoxm1q1RsP&destination=14fAoS9FPD9jx36hjCNoAqFVLNHD1NQVN5&op=AND" -H "Content-Type: application/json; charset=UTF-8" -H "Accept: application/json"
+    curl "http://rpc:rpc@127.0.0.1:4005/rest/sends/get?source=1B6ahDHnKtZ5GXqytHSxfcXgNoxm1q1RsP&destination=14fAoS9FPD9jx36hjCNoAqFVLNHD1NQVN5&op=AND" -H "Content-Type: application/json; charset=UTF-8" -H "Accept: application/json"
 
 ####Windows
 
 This example was created with curl 7.50.1 (x86_64-w64-mingw32) on Windows 10. For POST encryption add `'-X POST'`.
 
-    curl "http://rpc:rpc@127.0.0.1:4000/rest/sends/get?source=1B6ahDHnKtZ5GXqytHSxfcXgNoxm1q1RsP&destination=14fAoS9FPD9jx36hjCNoAqFVLNHD1NQVN5&op=AND" -H "Content-Type: application/json; charset=UTF-8" -H "Accept: application/json"
+    curl "http://rpc:rpc@127.0.0.1:4005/rest/sends/get?source=1B6ahDHnKtZ5GXqytHSxfcXgNoxm1q1RsP&destination=14fAoS9FPD9jx36hjCNoAqFVLNHD1NQVN5&op=AND" -H "Content-Type: application/json; charset=UTF-8" -H "Accept: application/json"
 
 ##Example Parameters
 
@@ -343,26 +343,26 @@ This example was created with curl 7.50.1 (x86_64-w64-mingw32) on Windows 10. Fo
 
 ##Signing Transactions Before Broadcasting
 
-**Note:** Before v9.49.4, the counterparty server API provided an interface to Bitcoin Core's signing functionality through the `do_*`, `sign_tx` and `broadcast_tx` methods, which have all since been removed.
+**Note:** Before v9.49.4, the dogeparty server API provided an interface to Bitcoin Core's signing functionality through the `do_*`, `sign_tx` and `broadcast_tx` methods, which have all since been removed.
 
 All ``create_`` API calls return an *unsigned raw transaction serialization* as a hex-encoded string (i.e. the same format that ``bitcoind`` returns with its raw transaction API calls). This raw transaction's inputs may be validated and then must be signed (i.e. via Bitcoin Core, a 3rd party Bitcoin library like Bitcore, etc) and broadcast on the Bitcoin network.
 
-The process of signing and broadcasting a transaction, from start to finish, depends somewhat on the wallet software used. Below are examples of how one might use a wallet to sign and broadcast an unsigned Counterparty transaction *created* with this API.
+The process of signing and broadcasting a transaction, from start to finish, depends somewhat on the wallet software used. Below are examples of how one might use a wallet to sign and broadcast an unsigned Dogeparty transaction *created* with this API.
 
 **Bitcoin Core with Python**
 
 	#! /usr/bin/env python3
 
-	from counterpartylib.lib import util
-	from counterpartylib.lib import config
-	from counterpartylib.lib.backend import addrindex
+	from dogepartylib.lib import util
+	from dogepartylib.lib import config
+	from dogepartylib.lib.backend import addrindex
 
 	config.TESTNET =
 	config.RPC =
 	config.BACKEND_URL =
 	config.BACKEND_SSL_NO_VERIFY =
 
-	def counterparty_api(method, params):
+	def dogeparty_api(method, params):
 	    return util.api(method, params)
 
 	def bitcoin_api(method, params):
@@ -372,21 +372,21 @@ The process of signing and broadcasting a transaction, from start to finish, dep
 	    validateaddress = bitcoin_api('validateaddress', [source])
 	    assert validateaddress['ismine']
 	    pubkey = validateaddress['pubkey']
-	    unsigned_tx = counterparty_api('create_send', {'source': source, 'destination': destination, 'asset': asset, 'quantity': quantity, 'pubkey': pubkey, 'allow_unconfirmed_inputs': True})
+	    unsigned_tx = dogeparty_api('create_send', {'source': source, 'destination': destination, 'asset': asset, 'quantity': quantity, 'pubkey': pubkey, 'allow_unconfirmed_inputs': True})
 	    signed_tx = bitcoin_api('signrawtransaction', [unsigned_tx])['hex']
 	    tx_hash = bitcoin_api('sendrawtransaction', [signed_tx])
 	    return tx_hash
 
 **Bitcoin Core with Javascript**
-(Utilizing the [Counterwallet Bitcore wrapper code](https://raw.githubusercontent.com/CounterpartyXCP/counterwallet/master/src/js/util.bitcore.js) for brevity.)
+(Utilizing the [Counterwallet Bitcore wrapper code](https://raw.githubusercontent.com/DogepartyXCP/counterwallet/master/src/js/util.bitcore.js) for brevity.)
 
     <html>
         <script src="https://raw.githubusercontent.com/bitpay/bitcore-lib/f031e1ddfbf0064ef503a28aada86c4fbf9a414c/bitcore-lib.min.js"></script>
-        <script src="https://raw.githubusercontent.com/CounterpartyXCP/counterwallet/master/src/js/util.bitcore.js"></script>
-        <script src="https://raw.githubusercontent.com/CounterpartyXCP/counterwallet/master/src/js/external/mnemonic.js"></script>
+        <script src="https://raw.githubusercontent.com/DogepartyXCP/counterwallet/master/src/js/util.bitcore.js"></script>
+        <script src="https://raw.githubusercontent.com/DogepartyXCP/counterwallet/master/src/js/external/mnemonic.js"></script>
         <script>
-        counterparty_api = function(method, params) {
-            // call Counterparty API method via your prefered method
+        dogeparty_api = function(method, params) {
+            // call Dogeparty API method via your prefered method
         }
 
         bitcoin_api = function(method, params) {
@@ -405,7 +405,7 @@ The process of signing and broadcasting a transaction, from start to finish, dep
         var pubkey = cwk.getPub()
 
         // generate unsigned transaction
-        unsigned_hex = counterparty_api('create_send', {'source': source, 'destination': destination, 'asset': asset, 'quantity': quantity, 'pubkey': pubkey})
+        unsigned_hex = dogeparty_api('create_send', {'source': source, 'destination': destination, 'asset': asset, 'quantity': quantity, 'pubkey': pubkey})
 
         CWBitcore.signRawTransaction2(self.unsignedTx(), cwk, function(signedHex) {
             bitcoin_api('sendrawtransaction', signedHex)
@@ -444,7 +444,7 @@ async function signP2SHDataTX(wif, txHex) {
 
 ###assets
 
-Everywhere in the API an asset is referenced by its name, not its ID. See the [Counterparty protocol specification](../protocol_specification#assets) for what constitutes a valid asset name.
+Everywhere in the API an asset is referenced by its name, not its ID. See the [Dogeparty protocol specification](../protocol_specification#assets) for what constitutes a valid asset name.
 Examples:
 
 - "BTC"
@@ -454,7 +454,7 @@ Examples:
 
 ###subassets
 
-See the [Counterparty protocol specification](../protocol_specification#subassets) for what constitutes a valid subasset name.
+See the [Dogeparty protocol specification](../protocol_specification#subassets) for what constitutes a valid subasset name.
 Examples:
 
 - "PIZZA.X"
@@ -478,7 +478,7 @@ Floats are ratios or floating point values with six decimal places of precision,
 
 ###Memos
 
-See the [Counterparty protocol specification](../protocol_specification/#memos) for what constitutes a valid memo.
+See the [Dogeparty protocol specification](../protocol_specification/#memos) for what constitutes a valid memo.
 Examples:
 
 - "for pizza"
@@ -489,7 +489,7 @@ Examples:
 
 ###Filtering Read API results
 
-The Counterparty API aims to be as simple and flexible as possible. To this end, it includes a straightforward
+The Dogeparty API aims to be as simple and flexible as possible. To this end, it includes a straightforward
 way to filter the results of most [Read API](#read-api-function-reference) to get the data you want, and only that.
 
 For each Read API function that supports it, a ``filters`` parameter exists. To apply a filter to a specific data field,
@@ -529,7 +529,7 @@ the specific comparison logic used, please see [this page](http://www.sqlite.org
 Where **{table}** must be one of the following values:
 ``assets``, ``balances``, ``bets``, ``bet_expirations``, ``bet_matches``, ``bet_match_expirations``, ``bet_match_resolutions``, ``broadcasts``, ``btcpays``, ``burns``, ``cancels``, ``credits``, ``debits``,  ``dividends``, ``issuances``, ``mempool``, ``orders``, ``order_expirations``, ``order_matches``, ``order_match_expirations``, or ``sends``, ``dispensers``.
 
-For example: ``get_balances``, ``get_credits``, ``get_debits`` are all valid API methods. A complete list of tables can be found in the api.py file in the counterparty-lib repository.
+For example: ``get_balances``, ``get_credits``, ``get_debits`` are all valid API methods. A complete list of tables can be found in the api.py file in the dogeparty-lib repository.
 
 **Parameters:**
 
@@ -577,7 +577,7 @@ For example: ``get_balances``, ``get_credits``, ``get_debits`` are all valid API
 **Notes:**
 
   * Please note that the ``get_balances`` API call will not return balances for BTC itself. It only returns balances
-    for XCP and other Counterparty assets. To get BTC-based balances, use an existing system such as Bitcoin Core, blockchain.info, etc.
+    for XCP and other Dogeparty assets. To get BTC-based balances, use an existing system such as Bitcoin Core, blockchain.info, etc.
 
 
 ###get_asset_info
@@ -628,7 +628,7 @@ Gets information on an issued asset.
 
 **Return:**
 
-  A list of the names of all existing Counterparty assets, ordered alphabetically.
+  A list of the names of all existing Dogeparty assets, ordered alphabetically.
 
 
 ###get_holder_count
@@ -750,9 +750,9 @@ Gets some operational parameters for the server.
   - **last_message_index** (*integer*): The index (ID) of the last message in the message feed
   - **running_testnet** (*boolean*): ``true`` if the server is configured for testnet, ``false`` if configured on mainnet.
   - **running_testcoin** (*boolean*): ``true`` if the server is configured for testcoin use, ``false`` if not (default).
-  - **version_major** (*integer*): The major version of counterparty-server running
-  - **version_minor** (*integer*): The minor version of counterparty-server running
-  - **version_revision** (*integer*): The revision version of counterparty-server running
+  - **version_major** (*integer*): The major version of dogeparty-server running
+  - **version_minor** (*integer*): The minor version of dogeparty-server running
+  - **version_revision** (*integer*): The revision version of dogeparty-server running
   - **api_limit_rows** (*integer*): The max amount of rows any call will return. If ``0`` there's no limit to calls. Defaults to ``1000``.
 
 
@@ -849,7 +849,7 @@ Gets raw transaction objects for the specified address.
 
 **get_tx_info(tx_hex, block_index=null)**
 
-Get transaction info, as parsed by `counterparty-server`.
+Get transaction info, as parsed by `dogeparty-server`.
 
 **Parameters:**
 
@@ -1081,7 +1081,7 @@ Issue a new asset, issue more of an existing asset, lock an asset, or transfer t
     issued for the asset.
   * A named asset has an issuance cost of 0.5 XCP.
   * A subasset has an issuance cost of 0.25 XCP.
-  * In order to issue an asset, BTC and XCP (for first time, non-free Counterparty assets) are required at the source address to pay fees.
+  * In order to issue an asset, BTC and XCP (for first time, non-free Dogeparty assets) are required at the source address to pay fees.
 
 
 
@@ -1168,7 +1168,7 @@ Each `create_` call detailed below can take the following common keyword paramet
   * **unspent_tx_hash** (*string*): When compiling the UTXOs to use as inputs for the transaction being created, only consider unspent outputs from this specific transaction hash. Defaults to `null` to consider all UTXOs for the address. Do not use this parameter if you are specifying `custom_inputs`.
   * **regular_dust_size** (*integer*): Specify (in satoshi) to override the (dust) amount of BTC used for each non-(bare) multisig output. Defaults to `5430` satoshi.
   * **multisig_dust_size** (*integer*): Specify (in satoshi) to override the (dust) amount of BTC used for each (bare) multisig output. Defaults to `7800` satoshi.
-  * **dust_return_pubkey** (*string*): The dust return pubkey is used in multi-sig data outputs (as the only real pubkey) to make those the outputs spendable. By default, this pubkey is taken from the pubkey used in the first transaction input. However, it can be overridden here (and is _required_ to be specified if a P2SH input is used and multisig is used as the data output encoding.) If specified, specify the public key (in hex format) where dust will be returned to so that it can be reclaimed. Only valid/useful when used with transactions that utilize multisig data encoding. Note that if this value is set to `false`, this instructs `counterparty-server` to use the default dust return pubkey configured at the node level. If this default is not set at the node level, the call will generate an exception.
+  * **dust_return_pubkey** (*string*): The dust return pubkey is used in multi-sig data outputs (as the only real pubkey) to make those the outputs spendable. By default, this pubkey is taken from the pubkey used in the first transaction input. However, it can be overridden here (and is _required_ to be specified if a P2SH input is used and multisig is used as the data output encoding.) If specified, specify the public key (in hex format) where dust will be returned to so that it can be reclaimed. Only valid/useful when used with transactions that utilize multisig data encoding. Note that if this value is set to `false`, this instructs `dogeparty-server` to use the default dust return pubkey configured at the node level. If this default is not set at the node level, the call will generate an exception.
   * **disable_utxo_locks** (*boolean*): By default, UTXO's utilized when creating a transaction are "locked" for a few seconds, to prevent a case where rapidly generating `create_` calls reuse UTXOs due to their spent status not being updated in bitcoind yet. Specify `true` for this parameter to disable this behavior, and not temporarily lock UTXOs.
   * **op_return_value** (*integer*): The value (in satoshis) to use with any `OP_RETURN` outputs in the generated transaction. Defaults to `0`. Don't use this, unless you like [throwing your money away](https://m.reddit.com/r/Bitcoin/comments/2plfsv/what_happens_to_the_value_of_a_coin_locked_with/cmxrnhu).
   * **extended_tx_info** (*boolean*): When this is not specified or false, the `create_` calls return only a hex-encoded string.  If this is true, the `create_` calls return a data object with the following keys: `tx_hex`, `btc_in`, `btc_out`, `btc_change`, and `btc_fee`.
@@ -1178,13 +1178,13 @@ Each `create_` call detailed below can take the following common keyword paramet
 
 ####Transaction Encodings
 
-By default the default value of the ``encoding`` parameter detailed above is ``auto``, which means that `counterparty-server` automatically determines the best way to encode the Counterparty protocol data into a new transaction. If you know what you are doing and would like to explicitly specify an encoding:
+By default the default value of the ``encoding`` parameter detailed above is ``auto``, which means that `dogeparty-server` automatically determines the best way to encode the Dogeparty protocol data into a new transaction. If you know what you are doing and would like to explicitly specify an encoding:
 
 - To return the transaction as an **OP_RETURN** transaction, specify ``opreturn`` for the ``encoding`` parameter.
    - **OP_RETURN** transactions cannot have more than 80 bytes of data. If you force OP_RETURN encoding and your transaction would have more than this amount, an exception will be generated.
 - To return the transaction as a **multisig** transaction, specify ``multisig`` for the ``encoding`` parameter.
     - ``pubkey`` should be set to the hex-encoded public key of the source address.
-    - Note that with the newest versions of Bitcoin (0.12.1 onward), bare multisig encoding does not reliably propagate. More information on this is documented [here](https://github.com/rubensayshi/counterparty-lib/pull/9).
+    - Note that with the newest versions of Bitcoin (0.12.1 onward), bare multisig encoding does not reliably propagate. More information on this is documented [here](https://github.com/rubensayshi/dogeparty-lib/pull/9).
 - To return the transaction as a **pubkeyhash** transaction, specify ``pubkeyhash`` for the ``encoding`` parameter.
     - ``pubkey`` should be set to the hex-encoded public key of the source address.
 - To return the transaction as a 2 part **P2SH** transaction, specify ``P2SH`` for the encoding parameter.
@@ -1199,7 +1199,7 @@ By default the default value of the ``encoding`` parameter detailed above is ``a
 
 ##REST API Function Reference
 
-The REST API documentation is hosted both on our webiste and on a new API documentation platform called apiary.io. This experimental documentation, complementary to the one in this document, is located [here](http://docs.counterpartylib.apiary.io/#).
+The REST API documentation is hosted both on our webiste and on a new API documentation platform called apiary.io. This experimental documentation, complementary to the one in this document, is located [here](http://docs.dogepartylib.apiary.io/#).
 
 ###get
 
@@ -1474,13 +1474,13 @@ An object that describes a specific send (e.g. "simple send", of XCP, or a user 
 
 ###Message Object
 
-An object that describes a specific event in the counterpartyd message feed (which can be used by 3rd party applications
-to track state changes to the counterpartyd database on a block-by-block basis).
+An object that describes a specific event in the dogepartyd message feed (which can be used by 3rd party applications
+to track state changes to the dogepartyd database on a block-by-block basis).
 
 * **message_index** (*integer*): The message index (i.e. transaction index)
 * **block_index** (*integer*): The block index (block number in the block chain) this event occurred on
 * **category** (*string*): A string denoting the entity that the message relates to, e.g. "credits", "burns", "debits".
-  The category matches the relevant table name in counterpartyd (see blocks.py for more info).
+  The category matches the relevant table name in dogepartyd (see blocks.py for more info).
 * **command** (*string*): The operation done to the table noted in **category**. This is either "insert", or "update".
 * **bindings** (*string*): A JSON-encoded object containing the message data. The properties in this object match the
   columns in the table referred to by **category**.
