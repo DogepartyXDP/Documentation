@@ -444,7 +444,7 @@ async function signP2SHDataTX(wif, txHex) {
 
 ###assets
 
-Everywhere in the API an asset is referenced by its name, not its ID. See the [Dogeparty protocol specification](../protocol_specification#assets) for what constitutes a valid asset name.
+Everywhere in the API an asset is referenced by its name, not its ID. See the [Dogeparty protocol specification](https://github.com/DogepartyXDP/Documentation/blob/master/Developers/protocol_specification.md) for what constitutes a valid asset name.
 Examples:
 
 - "DOGE"
