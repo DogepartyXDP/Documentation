@@ -267,12 +267,12 @@ This example was created with curl 7.50.1 (x86_64-w64-mingw32) on Windows 10. Fo
                    "id": 0
                   }
 
-* Fetch all debits for > 2 XCP between blocks 280537 and 280539, sorting the results by quantity (descending order)
+* Fetch all debits for > 2 XDP between blocks 280537 and 280539, sorting the results by quantity (descending order)
 
         payload = {
                    "method": "get_debits",
                    "params": {
-                              "filters": [{"field": "asset", "op": "==", "value": "XCP"},
+                              "filters": [{"field": "asset", "op": "==", "value": "XDP"},
                                           {"field": "quantity", "op": ">", "value": 200000000}],
                               "filterop": "AND",
                               "order_by": "quantity",
@@ -283,14 +283,14 @@ This example was created with curl 7.50.1 (x86_64-w64-mingw32) on Windows 10. Fo
                   }
 
 
-* Send 1 XCP (specified in satoshis) from one address to another.
+* Send 1 XDP (specified in satoshis) from one address to another.
 
         payload = {
                    "method": "create_send",
                    "params": {
                               "source": "1CUdFmgK9trTNZHALfqGvd8d6nUZqH2AAf",
                               "destination": "17rRm52PYGkntcJxD2yQF9jQqRS4S2nZ7E",
-                              "asset": "XCP",
+                              "asset": "XDP",
                               "quantity": 100000000
                              },
                    "jsonrpc": "2.0",
@@ -345,7 +345,7 @@ This example was created with curl 7.50.1 (x86_64-w64-mingw32) on Windows 10. Fo
 
 **Note:** Before v9.49.4, the dogeparty server API provided an interface to Dogecoin Core's signing functionality through the `do_*`, `sign_tx` and `broadcast_tx` methods, which have all since been removed.
 
-All ``create_`` API calls return an *unsigned raw transaction serialization* as a hex-encoded string (i.e. the same format that ``bitcoind`` returns with its raw transaction API calls). This raw transaction's inputs may be validated and then must be signed (i.e. via Dogecoin Core, a 3rd party Dogecoin library like Bitcore, etc) and broadcast on the Dogecoin network.
+All ``create_`` API calls return an *unsigned raw transaction serialization* as a hex-encoded string (i.e. the same format that ``dogecoind`` returns with its raw transaction API calls). This raw transaction's inputs may be validated and then must be signed (i.e. via Dogecoin Core, a 3rd party Dogecoin library like Bitcore, etc) and broadcast on the Dogecoin network.
 
 The process of signing and broadcasting a transaction, from start to finish, depends somewhat on the wallet software used. Below are examples of how one might use a wallet to sign and broadcast an unsigned Dogeparty transaction *created* with this API.
 
@@ -365,31 +365,31 @@ The process of signing and broadcasting a transaction, from start to finish, dep
 	def dogeparty_api(method, params):
 	    return util.api(method, params)
 
-	def bitcoin_api(method, params):
+	def dogecoin_api(method, params):
 	    return addrindex.rpc(method, params)
 
 	def do_send(source, destination, asset, quantity, fee, encoding):
-	    validateaddress = bitcoin_api('validateaddress', [source])
+	    validateaddress = dogecoin_api('validateaddress', [source])
 	    assert validateaddress['ismine']
 	    pubkey = validateaddress['pubkey']
 	    unsigned_tx = dogeparty_api('create_send', {'source': source, 'destination': destination, 'asset': asset, 'quantity': quantity, 'pubkey': pubkey, 'allow_unconfirmed_inputs': True})
-	    signed_tx = bitcoin_api('signrawtransaction', [unsigned_tx])['hex']
-	    tx_hash = bitcoin_api('sendrawtransaction', [signed_tx])
+	    signed_tx = dogecoin_api('signrawtransaction', [unsigned_tx])['hex']
+	    tx_hash = dogecoin_api('sendrawtransaction', [signed_tx])
 	    return tx_hash
 
 **Dogecoin Core with Javascript**
-(Utilizing the [Counterwallet Bitcore wrapper code](https://raw.githubusercontent.com/DogepartyXCP/counterwallet/master/src/js/util.bitcore.js) for brevity.)
+(Utilizing the [Counterwallet Bitcore wrapper code](https://raw.githubusercontent.com/DogepartyXDP/dogewallet/master/src/js/util.bitcore.js) for brevity.)
 
     <html>
         <script src="https://raw.githubusercontent.com/bitpay/bitcore-lib/f031e1ddfbf0064ef503a28aada86c4fbf9a414c/bitcore-lib.min.js"></script>
-        <script src="https://raw.githubusercontent.com/DogepartyXCP/counterwallet/master/src/js/util.bitcore.js"></script>
-        <script src="https://raw.githubusercontent.com/DogepartyXCP/counterwallet/master/src/js/external/mnemonic.js"></script>
+        <script src="https://raw.githubusercontent.com/DogepartyXDP/dogewallet/master/src/js/util.bitcore.js"></script>
+        <script src="https://raw.githubusercontent.com/DogepartyXDP/dogewallet/master/src/js/external/mnemonic.js"></script>
         <script>
         dogeparty_api = function(method, params) {
             // call Dogeparty API method via your prefered method
         }
 
-        bitcoin_api = function(method, params) {
+        dogecoin_api = function(method, params) {
             // call Dogecoin Core API method via your prefered method
         }
 
@@ -408,7 +408,7 @@ The process of signing and broadcasting a transaction, from start to finish, dep
         unsigned_hex = dogeparty_api('create_send', {'source': source, 'destination': destination, 'asset': asset, 'quantity': quantity, 'pubkey': pubkey})
 
         CWBitcore.signRawTransaction2(self.unsignedTx(), cwk, function(signedHex) {
-            bitcoin_api('sendrawtransaction', signedHex)
+            dogecoin_api('sendrawtransaction', signedHex)
         })
         </script>
     </html>
@@ -417,20 +417,20 @@ The process of signing and broadcasting a transaction, from start to finish, dep
 
 ```javascript
 // Assumes NodeJS runtime. Several libraries exist to replace the Buffer class on web browsers
-const bitcoin = require('bitcoinjs-lib')
+const dogecoin = require('dogecoinjs-lib')
 
 async function signP2SHDataTX(wif, txHex) {
-  const network = bitcoin.networks.testnet // Change appropiately to your used network
-  const keyPair = bitcoin.ECPair.fromWIF(wif, network)
-  const dataTx = bitcoin.Transaction.fromHex(txHex)   // The unsigned second part of the 2 part P2SH transactions
+  const network = dogecoin.networks.testnet // Change appropiately to your used network
+  const keyPair = dogecoin.ECPair.fromWIF(wif, network)
+  const dataTx = dogecoin.Transaction.fromHex(txHex)   // The unsigned second part of the 2 part P2SH transactions
 
-  const sigType = bitcoin.Transaction.SIGHASH_ALL // This shouldn't be changed unless you REALLY know what you're doing
+  const sigType = dogecoin.Transaction.SIGHASH_ALL // This shouldn't be changed unless you REALLY know what you're doing
   
   for (let i=0; i < dataTx.ins.length; i++) {
-    const sigHash = dataTx.hashForSignature(i, bitcoin.script.decompile(dataTx.ins[i].script)[0], sigType)
+    const sigHash = dataTx.hashForSignature(i, dogecoin.script.decompile(dataTx.ins[i].script)[0], sigType)
     const sig = keyPair.sign(sigHash)
-    const encodedSig = bitcoin.script.signature.encode(sig, sigType)
-    const compiled = bitcoin.script.compile([encodedSig])
+    const encodedSig = dogecoin.script.signature.encode(sig, sigType)
+    const compiled = dogecoin.script.compile([encodedSig])
 
     dataTx.ins[i].script = Buffer.concat([compiled, dataTx.ins[i].script])
   }
@@ -448,7 +448,7 @@ Everywhere in the API an asset is referenced by its name, not its ID. See the [D
 Examples:
 
 - "BTC"
-- "XCP"
+- "XDP"
 - "FOOBAR"
 - "A7736697071037023001"
 
@@ -470,7 +470,7 @@ Examples:
 - 4381030000 = 43.8103 (if divisible asset)
 - 4381030000 = 4381030000 (if indivisible asset)
 
-**NOTE:** XCP and BTC themselves are divisible assets.
+**NOTE:** XDP and BTC themselves are divisible assets.
 
 ###floats
 
@@ -527,7 +527,7 @@ the specific comparison logic used, please see [this page](http://www.sqlite.org
 **get_{table}(filters=[], filterop='AND', order_by=null, order_dir=null, start_block=null, end_block=null, status=null, limit=1000, offset=0, show_expired=true)**
 
 Where **{table}** must be one of the following values:
-``assets``, ``balances``, ``bets``, ``bet_expirations``, ``bet_matches``, ``bet_match_expirations``, ``bet_match_resolutions``, ``broadcasts``, ``btcpays``, ``burns``, ``cancels``, ``credits``, ``debits``,  ``dividends``, ``issuances``, ``mempool``, ``orders``, ``order_expirations``, ``order_matches``, ``order_match_expirations``, or ``sends``, ``dispensers``.
+``assets``, ``balances``, ``bets``, ``bet_expirations``, ``bet_matches``, ``bet_match_expirations``, ``bet_match_resolutions``, ``broadcasts``, ``dogepays``, ``burns``, ``cancels``, ``credits``, ``debits``,  ``dividends``, ``issuances``, ``mempool``, ``orders``, ``order_expirations``, ``order_matches``, ``order_match_expirations``, or ``sends``, ``dispensers``.
 
 For example: ``get_balances``, ``get_credits``, ``get_debits`` are all valid API methods. A complete list of tables can be found in the api.py file in the dogeparty-lib repository.
 
@@ -572,12 +572,12 @@ For example: ``get_balances``, ``get_credits``, ``get_debits`` are all valid API
   * To get a listing all open orders for a given address like 1Ayw5aXXTnqYfS3LbguMCf9dxRqzbTVbjf, you could call
     ``get_orders`` with the appropriate parameters. This method will return a list of one or more order [object](#order-object).
   * To get all open "buy BTC" orders from the DEx, call ``get_orders`` and use the following filter: ``[{"field": "get_asset", "op": "==", "value": "BTC"}, {"field": "status", "op": "==", "value": "open"}]``.
-  * To get all BTC pays (for DEx order matches) between the source 1Ayw5aXXTnqYfS3LbguMCf9dxRqzbTVbjf and destination (BTC buyer) 193SB3xgYjmfesdRqXq4g3eG9rD9DmWBSD, use `get_btcpays` method with these parameters: ``{ "filters": [{"field": "source", "op": "==", "value": "1Ayw5aXXTnqYfS3LbguMCf9dxRqzbTVbjf"}, {"field": "destination", "op": "==", "value": "193SB3xgYjmfesdRqXq4g3eG9rD9DmWBSD"}],"filterop": "and"}``
+  * To get all BTC pays (for DEx order matches) between the source 1Ayw5aXXTnqYfS3LbguMCf9dxRqzbTVbjf and destination (BTC buyer) 193SB3xgYjmfesdRqXq4g3eG9rD9DmWBSD, use `get_dogepays` method with these parameters: ``{ "filters": [{"field": "source", "op": "==", "value": "1Ayw5aXXTnqYfS3LbguMCf9dxRqzbTVbjf"}, {"field": "destination", "op": "==", "value": "193SB3xgYjmfesdRqXq4g3eG9rD9DmWBSD"}],"filterop": "and"}``
 
 **Notes:**
 
   * Please note that the ``get_balances`` API call will not return balances for BTC itself. It only returns balances
-    for XCP and other Dogeparty assets. To get BTC-based balances, use an existing system such as Dogecoin Core, blockchain.info, etc.
+    for XDP and other Dogeparty assets. To get BTC-based balances, use an existing system such as Dogecoin Core, blockchain.info, etc.
 
 
 ###get_asset_info
@@ -745,7 +745,7 @@ Gets some operational parameters for the server.
   An object with the following properties:
 
   - **db_caught_up** (*boolean*): ``true`` if block processing is caught up with the Dogecoin blockchain, ``false`` otherwise.
-  - **bitcoin_block_count** (**integer**): The block height on the Dogecoin network (may not necessarily be the same as ``last_block``, if the server is catching up)
+  - **dogecoin_block_count** (**integer**): The block height on the Dogecoin network (may not necessarily be the same as ``last_block``, if the server is catching up)
   - **last_block** (*integer*): The index (height) of the last block processed by the server
   - **last_message_index** (*integer*): The index (ID) of the last message in the message feed
   - **running_testnet** (*boolean*): ``true`` if the server is configured for testnet, ``false`` if configured on mainnet.
@@ -809,7 +809,7 @@ Gets raw data for a single transaction.
 
 **Return:**
 
-  If found, a raw transaction objects having the same format as the [bitcoind getrawtransaction API call](https://chainquery.com/bitcoin-api/getrawtransaction). If not found, `null`.
+  If found, a raw transaction objects having the same format as the [dogecoind getrawtransaction API call](https://chainquery.com/dogecoin-api/getrawtransaction). If not found, `null`.
 
 
 ###getrawtransaction_batch
@@ -826,7 +826,7 @@ Gets raw data for a list of transactions.
 
 **Return:**
 
-  A list of raw transaction objects having the same format as the [bitcoind getrawtransaction API call](https://chainquery.com/bitcoin-api/getrawtransaction).
+  A list of raw transaction objects having the same format as the [dogecoind getrawtransaction API call](https://chainquery.com/dogecoin-api/getrawtransaction).
 
 
 ###search_raw_transactions
@@ -842,7 +842,7 @@ Gets raw transaction objects for the specified address.
 
 **Return:**
 
-  A list of raw transaction objects, with each object having the same format as the [bitcoind getrawtransaction API call](https://chainquery.com/bitcoin-api/getrawtransaction).
+  A list of raw transaction objects, with each object having the same format as the [dogecoind getrawtransaction API call](https://chainquery.com/dogecoin-api/getrawtransaction).
 
 
 ###get_tx_info
@@ -862,7 +862,7 @@ Get transaction info, as parsed by `dogeparty-server`.
 
     - `source`
     - `destination`
-    - `btc_amount`
+    - `doge_amount`
     - `fee`
     - `data`: The embedded raw protocol data, in hexadecimal-serialized format
 
@@ -913,8 +913,8 @@ Issue a bet against a feed.
   * **feed_address** (*string*): The address that hosts the feed to be bet on.
   * **bet_type** (*integer*): 0 for Bullish CFD (deprecated), 1 for Bearish CFD (deprecated), 2 for Equal, 3 for NotEqual.
   * **deadline** (*integer*): The time at which the bet should be decided/settled, in Unix time (seconds since epoch).
-  * **wager_quantity** (*integer*): The [quantities](#quantities-and-balances) of XCP to wager (*in satoshis*, hence integer).
-  * **counterwager_quantity** (*integer*): The minimum [quantities](#quantities-and-balances) of XCP to be wagered against, for the bets to match.
+  * **wager_quantity** (*integer*): The [quantities](#quantities-and-balances) of XDP to wager (*in satoshis*, hence integer).
+  * **counterwager_quantity** (*integer*): The minimum [quantities](#quantities-and-balances) of XDP to be wagered against, for the bets to match.
   * **expiration** (*integer*): The number of blocks after which the bet expires if it remains unmatched.
   * **target_value** (*float, default=null*): Target value for Equal/NotEqual bet
   * **leverage** (*integer, default=5040*): Leverage, as a fraction of 5040
@@ -945,14 +945,14 @@ Broadcast textual and numerical information to the network.
   The unsigned transaction, as an hex-encoded string. Must be signed before being broadcast: see [here](#signing-transactions-before-broadcasting) for more information.
 
 
-###create_btcpay
+###create_dogepay
 
-**create_btcpay(order_match_id)**
+**create_dogepay(order_match_id)**
 
 Create and (optionally) broadcast a BTCpay message, to settle an Order Match for which you owe BTC.
 
 **Parameters:**
-  * **source** (*string*): The source address of the btcpay transaction.
+  * **source** (*string*): The source address of the dogepay transaction.
   * **order_match_id** (*string*): The concatenation of the hashes of the two transactions which compose the order match.
   * *NOTE: Additional (advanced) parameters for this call are documented [here](#advanced-create_-parameters).*
 
@@ -965,7 +965,7 @@ Create and (optionally) broadcast a BTCpay message, to settle an Order Match for
 
 **create_burn(source, quantity)**
 
-Burn a given quantity of BTC for XCP (**on mainnet, possible between blocks 278310 and 283810**; on testnet it is still available).
+Burn a given quantity of BTC for XDP (**on mainnet, possible between blocks 278310 and 283810**; on testnet it is still available).
 
 **Parameters:**
 
@@ -998,7 +998,7 @@ Cancel an open order or bet you created.
 
 **create_destroy(source, asset, quantity, tag)**
 
-Destroy XCP or a user defined asset.
+Destroy XDP or a user defined asset.
 
 **Parameters:**
 
@@ -1079,9 +1079,9 @@ Issue a new asset, issue more of an existing asset, lock an asset, or transfer t
   * To lock the issuance of the asset, specify "LOCK" for the ``description`` field. It's a special keyword that will
     not change the actual description, but will simply lock the asset quantity and not allow additional quantity to be
     issued for the asset.
-  * A named asset has an issuance cost of 0.5 XCP.
-  * A subasset has an issuance cost of 0.25 XCP.
-  * In order to issue an asset, BTC and XCP (for first time, non-free Dogeparty assets) are required at the source address to pay fees.
+  * A named asset has an issuance cost of 0.5 XDP.
+  * A subasset has an issuance cost of 0.25 XDP.
+  * In order to issue an asset, BTC and XDP (for first time, non-free Dogeparty assets) are required at the source address to pay fees.
 
 
 
@@ -1111,7 +1111,7 @@ Issue an order request.
 
 **create_send(source, destination, asset, quantity)**
 
-Send XCP or a user defined asset.
+Send XDP or a user defined asset.
 
 To send multiple assets/destinations simultaneously you can pass an array of parameters to the destination, asset and quantity parameters. If one of these parameters is an array then the other must be an array of equal length. Each entry corresponds to the same entry index on the other arrays.
 
@@ -1123,7 +1123,7 @@ To send multiple assets/destinations simultaneously you can pass an array of par
   * **quantity** (*integer, array[integer]*): The [quantities](#quantities-and-balances) of the asset to send.
   * **memo** (*string, optional*): The [Memo](../protocol_specification#memos) associated with this transaction.
   * **memo_is_hex** (*boolean, optional*): If this is true, interpret the [memo](../protocol_specification#memos) as a hexadecimal value.  Defaults to false.
-  * **use_enhanced_send** (*boolean, optional*): If this is false, the construct a legacy transaction sending bitcoin dust.  Defaults to true.
+  * **use_enhanced_send** (*boolean, optional*): If this is false, the construct a legacy transaction sending dogecoin dust.  Defaults to true.
   * *NOTE: Additional (advanced) parameters for this call are documented [here](#advanced-create_-parameters).*
 
 
@@ -1164,14 +1164,14 @@ Each `create_` call detailed below can take the following common keyword paramet
   * **fee** (*integer*): If you'd like to specify a custom miners' fee, specify it here (in satoshi). Leave as default for the server to automatically choose.
   * **fee_per_kb** (*integer*): The fee per kilobyte of transaction data constant that the server uses when deciding on the dynamic fee to use (in satoshi).
   * **fee_provided** (*integer*): If you would like to specify a maximum fee (up to and including which may be used as the transaction fee), specify it here (in satoshi). This differs from `fee` in that this is an upper bound value, which `fee` is an exact value.
-  * **custom_inputs** (*list*): Use only these specific UTXOs as inputs for the transaction being created. If specified, this parameter is a list of (JSON-encoded) UTXO objects, whose properties match those as retrieved by `listunspent` function from bitcoind (e.g. see [here](https://chainquery.com/bitcoin-api/listunspent)). Note that the actual UTXOs used may be a subset of this list.
+  * **custom_inputs** (*list*): Use only these specific UTXOs as inputs for the transaction being created. If specified, this parameter is a list of (JSON-encoded) UTXO objects, whose properties match those as retrieved by `listunspent` function from dogecoind (e.g. see [here](https://chainquery.com/dogecoin-api/listunspent)). Note that the actual UTXOs used may be a subset of this list.
   * **unspent_tx_hash** (*string*): When compiling the UTXOs to use as inputs for the transaction being created, only consider unspent outputs from this specific transaction hash. Defaults to `null` to consider all UTXOs for the address. Do not use this parameter if you are specifying `custom_inputs`.
   * **regular_dust_size** (*integer*): Specify (in satoshi) to override the (dust) amount of BTC used for each non-(bare) multisig output. Defaults to `5430` satoshi.
   * **multisig_dust_size** (*integer*): Specify (in satoshi) to override the (dust) amount of BTC used for each (bare) multisig output. Defaults to `7800` satoshi.
   * **dust_return_pubkey** (*string*): The dust return pubkey is used in multi-sig data outputs (as the only real pubkey) to make those the outputs spendable. By default, this pubkey is taken from the pubkey used in the first transaction input. However, it can be overridden here (and is _required_ to be specified if a P2SH input is used and multisig is used as the data output encoding.) If specified, specify the public key (in hex format) where dust will be returned to so that it can be reclaimed. Only valid/useful when used with transactions that utilize multisig data encoding. Note that if this value is set to `false`, this instructs `dogeparty-server` to use the default dust return pubkey configured at the node level. If this default is not set at the node level, the call will generate an exception.
-  * **disable_utxo_locks** (*boolean*): By default, UTXO's utilized when creating a transaction are "locked" for a few seconds, to prevent a case where rapidly generating `create_` calls reuse UTXOs due to their spent status not being updated in bitcoind yet. Specify `true` for this parameter to disable this behavior, and not temporarily lock UTXOs.
+  * **disable_utxo_locks** (*boolean*): By default, UTXO's utilized when creating a transaction are "locked" for a few seconds, to prevent a case where rapidly generating `create_` calls reuse UTXOs due to their spent status not being updated in dogecoind yet. Specify `true` for this parameter to disable this behavior, and not temporarily lock UTXOs.
   * **op_return_value** (*integer*): The value (in satoshis) to use with any `OP_RETURN` outputs in the generated transaction. Defaults to `0`. Don't use this, unless you like [throwing your money away](https://m.reddit.com/r/Dogecoin/comments/2plfsv/what_happens_to_the_value_of_a_coin_locked_with/cmxrnhu).
-  * **extended_tx_info** (*boolean*): When this is not specified or false, the `create_` calls return only a hex-encoded string.  If this is true, the `create_` calls return a data object with the following keys: `tx_hex`, `btc_in`, `btc_out`, `btc_change`, and `btc_fee`.
+  * **extended_tx_info** (*boolean*): When this is not specified or false, the `create_` calls return only a hex-encoded string.  If this is true, the `create_` calls return a data object with the following keys: `tx_hex`, `doge_in`, `doge_out`, `doge_change`, and `doge_fee`.
   * **p2sh_pretx_txid** (*string*): The previous transaction `txid` for a two part ``P2SH`` message. This `txid` must be taken from the signed transaction.
 
 **With the exception of `pubkey` and `allow_unconfirmed_inputs`, these values should be left at their defaults, unless you know what you are doing.**
@@ -1193,7 +1193,7 @@ By default the default value of the ``encoding`` parameter detailed above is ``a
     - The resulting ``txid`` must be passed again on an identic call to the ``create_`` method, but now passing an additional parameter ``p2sh_pretx_txid`` with the value of the previous transaction's id.
     - The resulting transaction is a ``P2SH`` encoded message, using the redeem script on the transaction inputs as data carrying mechanism.
     - Sign the transaction following the ``Dogecoinjs-lib on javascript, signing a P2SH redeeming transaction`` section
-    - **NOTE**: Don't leave pretxs hanging without transmitting the second transaction as this pollutes the UTXO set and risks making bitcoin harder to run on low spec nodes.
+    - **NOTE**: Don't leave pretxs hanging without transmitting the second transaction as this pollutes the UTXO set and risks making dogecoin harder to run on low spec nodes.
 
 
 
@@ -1218,7 +1218,7 @@ Example query:
 **Parameters:**
   * **table_name** (*string*): The name of the desired table. List of all available tables:
               `assets`, `balances`, `credits`, `debits`, `bets`, `bet_matches`,
-              `broadcasts`, `btcpays`, `burns`, `cancels`, `dividends`, `issuances`,
+              `broadcasts`, `dogepays`, `burns`, `cancels`, `dividends`, `issuances`,
               `orders`, `order_matches`, `sends`, `bet_expirations`, `order_expirations`,
               `bet_match_expirations`, `order_match_expirations`, `bet_match_resolutions`, `mempool`
   * **filters** (*dict, optional*): Data filters as a dictionary. The filter format is same as for get_{} JSON API queries. See [Filtering Read API Results](#filtering-read-api-results) for more information on filters and [Object Definitions](#objects) for fields available for specific objects.
@@ -1248,7 +1248,7 @@ Example query:
 
 **Parameters:**
   * **message_type** (*string*): The type of desired transaction message. List of all available transactions:
-                `bet`, `broadcast`, `btcpay`, `burn`, `cancel`, `dividend`, `issuance`,
+                `bet`, `broadcast`, `dogepay`, `burn`, `cancel`, `dividend`, `issuance`,
                 `order`, `send`, `publish`, `execute`
   * **transaction_params** (*dict*): The parameters to be passed to the compose_transaction function. See [Write API Function Reference](#actionwrite-api-function-reference) for list of transactions and their parameters.
 
@@ -1285,9 +1285,9 @@ An object that describes a specific bet:
 * **feed_address** (*string*): The address with the feed that the bet is to be made on
 * **bet_type** (*integer*): 0 for Bullish CFD (deprecated), 1 for Bearish CFD (deprecated), 2 for Equal, 3 for Not Equal
 * **deadline** (*integer*): The timestamp at which the bet should be decided/settled, in Unix time.
-* **wager_quantity** (*integer*): The [quantities](#quantities-and-balances) of XCP to wager
-* **counterwager_quantity** (*integer*): The minimum [quantities](#quantities-and-balances) of XCP to be wagered by the user to bet against the bet issuer, if the other party were to accept the whole thing
-* **wager_remaining** (*integer*): The quantity of XCP wagered that is remaining to bet on
+* **wager_quantity** (*integer*): The [quantities](#quantities-and-balances) of XDP to wager
+* **counterwager_quantity** (*integer*): The minimum [quantities](#quantities-and-balances) of XDP to be wagered by the user to bet against the bet issuer, if the other party were to accept the whole thing
+* **wager_remaining** (*integer*): The quantity of XDP wagered that is remaining to bet on
 * **odds** (*float*):
 * **target_value** (*float*): Target value for Equal/NotEqual bet
 * **leverage** (*integer*): Leverage, as a fraction of 5040
@@ -1317,8 +1317,8 @@ An object that describes a specific occurance of two bets being matched (either 
 * **deadline** (*integer*): The timestamp at which the bet match was made, in Unix time.
 * **target_value** (*float*): Target value for Equal/NotEqual bet  
 * **leverage** (*integer*): Leverage, as a fraction of 5040
-* **forward_quantity** (*integer*): The [quantities](#quantities-and-balances) of XCP bet in the initial bet
-* **backward_quantity** (*integer*): The [quantities](#quantities-and-balances) of XCP bet in the matching bet
+* **forward_quantity** (*integer*): The [quantities](#quantities-and-balances) of XDP bet in the initial bet
+* **backward_quantity** (*integer*): The [quantities](#quantities-and-balances) of XDP bet in the matching bet
 * **fee_multiplier** (*integer*):
 * **validity** (*string*): Set to "valid" if a valid order match. Any other setting signifies an invalid/improper order match
 
@@ -1396,7 +1396,7 @@ An object that describes an issuance of dividends on a specific user defined ass
 * **block_index** (*integer*): The block index (block number in the block chain)
 * **source** (*string*): The address that issued the dividend
 * **asset** (*string*): The [assets](#assets) that the dividends are being rewarded on
-* **quantity_per_unit** (*integer*): The [quantities](#quantities-and-balances) of XCP rewarded per whole unit of the asset
+* **quantity_per_unit** (*integer*): The [quantities](#quantities-and-balances) of XDP rewarded per whole unit of the asset
 * **validity** (*string*): Set to "valid" if a valid burn. Any other setting signifies an invalid/improper burn
 
 
@@ -1459,7 +1459,7 @@ An object that describes a specific occurance of two orders being matched (eithe
 
 ###Send Object
 
-An object that describes a specific send (e.g. "simple send", of XCP, or a user defined asset):
+An object that describes a specific send (e.g. "simple send", of XDP, or a user defined asset):
 
 * **tx_index** (*integer*): The transaction index
 * **tx_hash** (*string*): The transaction hash
@@ -1536,7 +1536,7 @@ Here the list of all possible status for each table:
 * **bet_matches**: pending, settled: liquidated for bear (deprecated), settled, settled: liquidated for bull (deprecated), settled: for equal, settled: for notequal, dropped, expired
 * **bets**: open, filled, cancelled, expired, dropped, invalid: {problem(s)}
 * **broadcasts**: valid, invalid: {problem(s)}
-* **btcpays**: valid, invalid: {problem(s)}
+* **dogepays**: valid, invalid: {problem(s)}
 * **burns**: valid, invalid: {problem(s)}
 * **cancels**: valid, invalid: {problem(s)}
 * **credits**: No status field
