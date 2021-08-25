@@ -9,8 +9,8 @@
 that of Dogecoin Core. It is the primary means by which other applications
 should interact with the Dogeparty network.
 
-The API server is started either through the [`CLI interface`](dogeparty-cli.md) or
-with the [`dogeparty-lib`](dogeparty_lib.md) Python library. It listens on port
+The API server is started either through the `CLI interface` or
+with the `dogeparty-lib` Python library. It listens on port
 4005 by default (14005 for ``testnet``) and requires HTTP Basic Authentication to connect.
 
 The API includes numerous information retrieval methods, most of which begin with `get_`, as well as several
