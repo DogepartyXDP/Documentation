@@ -2,9 +2,9 @@
 
 ## Introduction
 
-This document describes how one can set up their own Dogeparty "Federated Node" system, on Linux, Windows or OS X.
+This document describes how one can set up their own Dogeparty "Doge Node" system, on Linux, Windows or OS X.
 
-A Federated Node is a self-contained system that runs the some or all of the Dogeparty software stack, via Docker. Each system operates as a Dogecoin and Dogeparty "full node". Using this toolset, one can generally get started running the Dogeparty software much quicker and more easily than a manual installation of the various components.
+A Doge Node is a self-contained system that runs the some or all of the Dogeparty software stack, via Docker. Each system operates as a Dogecoin and Dogeparty "full node". Using this toolset, one can generally get started running the Dogeparty software much quicker and more easily than a manual installation of the various components.
 
 The document is primarily intended for power users and developers.
 
