@@ -86,7 +86,7 @@ sudo apt-get update && sudo apt-get upgrade
 sudo apt-get -y install git curl coreutils
 ```
 
-Install docker and docker-compose (see [here](https://docs.docker.com/compose/install/) for more info, here we use v1.16.1):
+Install docker and docker-compose (see [here](https://docs.docker.com/compose/install/) for more info):
 ```
 sudo apt-get -y install docker docker-compose
 ```
