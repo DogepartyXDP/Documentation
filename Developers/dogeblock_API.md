@@ -1,8 +1,8 @@
-#counterblock API
+#dogeblock API
 
-For an overview of `counterblock`, see [here](http://counterparty.io/docs/platform_architecture/).
+For an overview of `dogeblock`, see [here](http://dogeparty.io/docs/platform_architecture/).
 
-`counterblock` release information is available from [this link](https://github.com/CounterpartyXCP/counterblock/releases).
+`dogeblock` release information is available from [this link](https://github.com/CounterpartyXCP/dogeblock/releases).
 
 **Warning:** *This API documentation is INCOMPLETE. It contains errors, omissions, etc., and could change drastically at any time.*
 
@@ -11,14 +11,14 @@ For an overview of `counterblock`, see [here](http://counterparty.io/docs/platfo
 
 ###Connecting to the API
 
-By default, ``counterblock`` will listen on port ``4100`` for API
+By default, ``dogeblock`` will listen on port ``4100`` for API
 requests. API requests are made via a HTTP POST request to ``/api/``, with JSON-encoded
 data passed as the POST body. For more information on JSON RPC, please see the [JSON RPC specification](http://json-rpc.org/wiki/specification).
 
 
 ###Terms & Conventions
 
-The API calls documented are categorized based on the `counterblock` module/plug-in they appear in. For a list of the various modules with a description of each one, see [the counterblock modules document](http://counterparty.io/docs/counterblock_modules/).
+The API calls documented are categorized based on the `dogeblock` module/plug-in they appear in. For a list of the various modules with a description of each one, see [the dogeblock modules document](http://dogeparty.io/docs/dogeblock_modules/).
 
 **Return Types**
 
@@ -31,21 +31,21 @@ The API calls documented are categorized based on the `counterblock` module/plug
 
 **wallet IDs**
 
-An individual Counterwallet user needs a way to identify themselves to ``counterblock`` for things like storing
+An individual Dogewallet user needs a way to identify themselves to ``dogeblock`` for things like storing
 and retrieving their wallet preferences data, and more.
 
-For this purpose, we define the concept of a wallet ID, which is simply the user's Counterwallet 12-word password,
+For this purpose, we define the concept of a wallet ID, which is simply the user's Dogewallet 12-word password,
 double-hashed with SHA256 and converted to base 64.
 
 ###core API
 
-These API methods are part of the core `counterblock` code, and not part of a plugin module.
+These API methods are part of the core `dogeblock` code, and not part of a plugin module.
 
 ####get_messagefeed_messages_by_index
 
 **get_messagefeed_messages_by_index(message_indexes)**
 
-Alias for counterpartyd get_messages_by_index
+Alias for dogeparty get_messages_by_index
 
 - **param list message_indexs:** Message IDs to fetch
 - **return:** A list of messages
@@ -124,15 +124,15 @@ Gets raw transactions for a particular address
 - **return:** Returns the data, ordered from newest txn to oldest. If any limit is applied, it will cut back from the oldest results
 - **rtype:** {id: {status, tx_hash, _divisible, _tx_index, block_index, _category, destination, tx_index, _block_time, source, asset, _command, quantity}}
 
-####proxy_to_counterpartyd
+####proxy_to_dogeparty-lib
 
-**proxy_to_counterpartyd(method='', params={})**
+**proxy_to_dogeparty(method='', params={})**
 
-- **param method:** Method name to call in counterpartyd.
+- **param method:** Method name to call in dogeparty.
 - **param params:** Array of function parameters.
-- **returns:** The method response from counterpartyd
+- **returns:** The method response from dogeparty
 
-Relays a request to the counterpartyd server, with the given method and params, and returns the result. See the [API documentation](counterblock_api.rst) for available methods.
+Relays a request to the dogeparty server, with the given method and params, and returns the result. See the [API documentation](dogeblock_api.rst) for available methods.
 
 **NOTE:** This method may be depreciated/removed in the future.
 
@@ -143,7 +143,7 @@ Relays a request to the counterpartyd server, with the given method and params, 
 
 **get_normalized_balances(addresses)**
 
-This call augments counterparty's get_balances with a normalized_quantity field. It also will include any owned assets for an address, even if their balance is zero. NOTE: Does not retrieve BTC balance. Use get_address_info for that.
+This call augments dogeparty's get_balances with a normalized_quantity field. It also will include any owned assets for an address, even if their balance is zero. NOTE: Does not retrieve DOGE balance. Use get_address_info for that.
 
 - **param addresses:** The addresses to retrieve balances on
 - **return:** Balances are returned as a list of dicts, with each dict having the following structure:
@@ -216,12 +216,12 @@ Given two arbitrary assets, returns the base asset and the quote asset.
 - **param asset2:** Second asset name
 - **param limit:** Max # of records to return
 - **return:** Market info for the given pair
-- **rtype:** {'24h_vol_in_btc', 'open_orders_count', 'lowest_ask', 'base_asset', 'completed_trades_count', '24h_pct_change', 'vol_quote', 'highest_bid', '24h_vol_in_xcp', 'vol_base', 'last_updated', 'quote_asset'}
+- **rtype:** {'24h_vol_in_doge', 'open_orders_count', 'lowest_ask', 'base_asset', 'completed_trades_count', '24h_pct_change', 'vol_quote', 'highest_bid', '24h_vol_in_xcp', 'vol_base', 'last_updated', 'quote_asset'}
 
 ####get_asset_extended_info
 **get_asset_extended_info(asset)**
 
-Returns extended asset data (i.e. that published via an external .json file, as documented [here](http://counterparty.io/docs/enhanced_asset_info/)), if available, for a specific asset.
+Returns extended asset data (i.e. that published via an external .json file, as documented [here](http://dogeparty.io/docs/enhanced_asset_info/)), if available, for a specific asset.
 
  - **param asset:** The name of the asset (e.g. "XCP")
  - **return:** Information on the asset or False if no extended info exists. Contains the data as documented in the extended asset info JSON format, among other fields.
@@ -292,7 +292,7 @@ Use `get_market_price_history`
 
 - **param list assets:** Assets to check
 - **return:** Array
-- **rtype:** {'24h_hlc_in_btc', 'extended_description', 'extended_pgpsig', 'aggregated_price_as_btc', 'price_in_btc', '24h_summary':{'vol', 'count'}, 'market_cap_in_btc', 'asset', 'price_as_xcp', '7d_history_in_btc':[[ts, price]], '24h_vol_price_change_in_xcp', 'price_in_xcp', 'extended_website', '24h_vol_price_change_in_btc', 'aggregated_price_as_xcp', 'market_cap_in_xcp', '7d_history_in_xcp':[[ts, price]], 'aggregated_price_in_btc', 'aggregated_price_in_xcp', 'price_as_btc', 'total_supply', '24h_ohlc_xcp', 'extended_image'}
+- **rtype:** {'24h_hlc_in_doge', 'extended_description', 'extended_pgpsig', 'aggregated_price_as_doge', 'price_in_doge', '24h_summary':{'vol', 'count'}, 'market_cap_in_doge', 'asset', 'price_as_xcp', '7d_history_in_doge':[[ts, price]], '24h_vol_price_change_in_xcp', 'price_in_xcp', 'extended_website', '24h_vol_price_change_in_doge', 'aggregated_price_as_xcp', 'market_cap_in_xcp', '7d_history_in_xcp':[[ts, price]], 'aggregated_price_in_doge', 'aggregated_price_in_xcp', 'price_as_doge', 'total_supply', '24h_ohlc_xcp', 'extended_image'}
 
 ####get_market_info_leaderboard
 **get_market_info_leaderboard(limit=100)**
@@ -300,25 +300,25 @@ Use `get_market_price_history`
 - **param limit:** Number of results to return
 - **return:** Array
 - **rtype:** {base_currency:[{
-             '24h_ohlc_in_btc',
+             '24h_ohlc_in_doge',
              'total_supply',
-             'aggregated_price_in_btc',
-             'price_in_btc',
+             'aggregated_price_in_doge',
+             'price_in_doge',
              '24h_vol_price_change_in_xcp',
              'aggregated_price_in_xcp',
              '24h_summary: {'vol', 'count'},
              'price_in_xcp',
-             'price_as_btc',
-             'market_cap_in_btc',
+             'price_as_doge',
+             'market_cap_in_doge',
              '24h_ohlc_in_xcp',
-             '24h_vol_price_change_in_btc',
+             '24h_vol_price_change_in_doge',
              'aggregated_price_as_xcp',
              'market_cap_in_xcp',
              'asset',
              'price_as_xcp',
              '7d_history_in_xcp',
-             '7d_history_in_btc',
-             'aggregated_price_as_btc'}]}
+             '7d_history_in_doge',
+             'aggregated_price_as_doge'}]}
 
 
 ####get_market_price_history
@@ -368,7 +368,7 @@ Gets last N of trades within a specific date range (normally, for a specified as
 **get_order_book_simple(asset1, asset2, min_pct_fee_provided=None, max_pct_fee_required=None)**
 
 *deprecated: 1.5*
-  Use counterparty-server's `get_orders`
+  Use dogeparty-server's `get_orders`
 
 Easier to call version when you want all orders involving the two assets.
 
@@ -412,7 +412,7 @@ Easier to call version when you want all orders involving the two assets.
 **get_order_book_buysell(buy_asset, sell_asset, pct_fee_provided=None, pct_fee_required=None)**
 
 *deprecated: 1.5*
-  Use counterparty-server's `get_orders` 
+  Use dogeparty-server's `get_orders` 
 
 
 - **param buy_asset:** Asset
@@ -580,7 +580,7 @@ Takes a base64-encoded feed and decodes it.
   }]
 
 
-###counterwallet Module
+###dogewallet Module
 
 ####is_ready
 **is_ready()**
@@ -657,7 +657,7 @@ create an email with the information received
 - **param addtl_info:** A JSON-encoded string of a dict with additional information to include in the support request
 
 
-###counterwallet_iofeeds Module
+###dogewallet_iofeeds Module
 
 ####get_num_users_online
 **get_num_users_online()**
@@ -712,22 +712,22 @@ This function returns the number of transactions in each 24 hour clock within th
 
 ###API Changes
 
-This section documents any changes to the ``counterblock`` API, for version numbers where there were API-level modifications.
+This section documents any changes to the ``dogeblock`` API, for version numbers where there were API-level modifications.
 
 ####1.2.0
 
 Removed the following API calls:
 
-- ``record_btc_open_order``
-- ``cancel_btc_open_order``
+- ``record_doge_open_order``
+- ``cancel_doge_open_order``
 
-Since BTC trading was removed from Counterwallet months ago, these calls are not necessary.
+Since DOGE trading was removed from Dogewallet months ago, these calls are not necessary.
 
 ####1.1.0
 
 Deprecated several redundant/unused functions for removal in a future version. Any code calling these functions should be re-written. Refer to the documentation of the individual functions for replacements.
 
-- ``cancel_btc_open_order``
+- ``cancel_doge_open_order``
 - ``get_asset_pair_market_info``
 - ``get_base_quote_asset``
 - ``get_chain_block_height``
