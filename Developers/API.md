@@ -251,7 +251,7 @@ This example was created with curl 7.50.1 (x86_64-w64-mingw32) on Windows 10. Fo
                    "id": 0
                   }
 
-* Get all burns between blocks 280537 and 280539 where greater than .2 BTC was burned, sorting by `tx_hash` (ascending order)
+* Get all burns between blocks 280537 and 280539 where greater than .2 DOGE was burned, sorting by `tx_hash` (ascending order)
 
         payload = {
                    "method": "get_burns",
@@ -447,7 +447,7 @@ async function signP2SHDataTX(wif, txHex) {
 Everywhere in the API an asset is referenced by its name, not its ID. See the [Dogeparty protocol specification](../protocol_specification#assets) for what constitutes a valid asset name.
 Examples:
 
-- "BTC"
+- "DOGE"
 - "XDP"
 - "FOOBAR"
 - "A7736697071037023001"
@@ -470,7 +470,7 @@ Examples:
 - 4381030000 = 43.8103 (if divisible asset)
 - 4381030000 = 4381030000 (if indivisible asset)
 
-**NOTE:** XDP and BTC themselves are divisible assets.
+**NOTE:** XDP and DOGE themselves are divisible assets.
 
 ###floats
 
@@ -571,13 +571,13 @@ For example: ``get_balances``, ``get_credits``, ``get_debits`` are all valid API
   * To get a listing of bets, call ``get_bets``. This method will return a list of one or more [bet object](#bet-object) .
   * To get a listing all open orders for a given address like 1Ayw5aXXTnqYfS3LbguMCf9dxRqzbTVbjf, you could call
     ``get_orders`` with the appropriate parameters. This method will return a list of one or more order [object](#order-object).
-  * To get all open "buy BTC" orders from the DEx, call ``get_orders`` and use the following filter: ``[{"field": "get_asset", "op": "==", "value": "BTC"}, {"field": "status", "op": "==", "value": "open"}]``.
-  * To get all BTC pays (for DEx order matches) between the source 1Ayw5aXXTnqYfS3LbguMCf9dxRqzbTVbjf and destination (BTC buyer) 193SB3xgYjmfesdRqXq4g3eG9rD9DmWBSD, use `get_dogepays` method with these parameters: ``{ "filters": [{"field": "source", "op": "==", "value": "1Ayw5aXXTnqYfS3LbguMCf9dxRqzbTVbjf"}, {"field": "destination", "op": "==", "value": "193SB3xgYjmfesdRqXq4g3eG9rD9DmWBSD"}],"filterop": "and"}``
+  * To get all open "buy DOGE" orders from the DEx, call ``get_orders`` and use the following filter: ``[{"field": "get_asset", "op": "==", "value": "DOGE"}, {"field": "status", "op": "==", "value": "open"}]``.
+  * To get all DOGE pays (for DEx order matches) between the source 1Ayw5aXXTnqYfS3LbguMCf9dxRqzbTVbjf and destination (DOGE buyer) 193SB3xgYjmfesdRqXq4g3eG9rD9DmWBSD, use `get_dogepays` method with these parameters: ``{ "filters": [{"field": "source", "op": "==", "value": "1Ayw5aXXTnqYfS3LbguMCf9dxRqzbTVbjf"}, {"field": "destination", "op": "==", "value": "193SB3xgYjmfesdRqXq4g3eG9rD9DmWBSD"}],"filterop": "and"}``
 
 **Notes:**
 
-  * Please note that the ``get_balances`` API call will not return balances for BTC itself. It only returns balances
-    for XDP and other Dogeparty assets. To get BTC-based balances, use an existing system such as Dogecoin Core, blockchain.info, etc.
+  * Please note that the ``get_balances`` API call will not return balances for DOGE itself. It only returns balances
+    for XDP and other Dogeparty assets. To get DOGE-based balances, use an existing system such as Dogecoin Core, blockchain.info, etc.
 
 
 ###get_asset_info
@@ -949,7 +949,7 @@ Broadcast textual and numerical information to the network.
 
 **create_dogepay(order_match_id)**
 
-Create and (optionally) broadcast a BTCpay message, to settle an Order Match for which you owe BTC.
+Create and (optionally) broadcast a DOGEpay message, to settle an Order Match for which you owe DOGE.
 
 **Parameters:**
   * **source** (*string*): The source address of the dogepay transaction.
@@ -965,12 +965,12 @@ Create and (optionally) broadcast a BTCpay message, to settle an Order Match for
 
 **create_burn(source, quantity)**
 
-Burn a given quantity of BTC for XDP (**on mainnet, possible between blocks 278310 and 283810**; on testnet it is still available).
+Burn a given quantity of DOGE for XDP (**on mainnet, possible between blocks 278310 and 283810**; on testnet it is still available).
 
 **Parameters:**
 
-  * **source** (*string*): The address with the BTC to burn.
-  * **quantity** (*integer*): The [quantities](#quantities-and-balances) of BTC to burn (1 BTC maximum burn per address).
+  * **source** (*string*): The address with the DOGE to burn.
+  * **quantity** (*integer*): The [quantities](#quantities-and-balances) of DOGE to burn (1 DOGE maximum burn per address).
   * *NOTE: Additional (advanced) parameters for this call are documented [here](#advanced-create_-parameters).*
 
 **Return:**
@@ -1016,7 +1016,7 @@ Destroy XDP or a user defined asset.
 
 **create_dispenser(source, asset, give_quantity, escrow_quantity, mainchainrate, status, open_address)**
 
-Opens or closes a dispenser for a given asset at a given rate of main chain asset (BTC). Escrowed
+Opens or closes a dispenser for a given asset at a given rate of main chain asset (DOGE). Escrowed
 quantity on open must be equal or greater than *give_quantity*. It is suggested that you escrow multiples
 of give_quantity to ease dispenser operation.
 
@@ -1026,7 +1026,7 @@ of give_quantity to ease dispenser operation.
   * **asset** (*string*): The [asset](#assets) or [subasset](#subassets) to dispense.
   * **give_quantity** (*integer*): The [quantity](#quantities-and-balances) of the asset to dispense.
   * **escrow_quantity** (*integer*): The [quantity](#quantities-and-balances) of the asset to reserve for this dispenser.
-  * **mainchainrate** (*integer*): The [quantity](#quantities-and-balances) of the main chain asset (BTC) per dispensed portion.
+  * **mainchainrate** (*integer*): The [quantity](#quantities-and-balances) of the main chain asset (DOGE) per dispensed portion.
   * **open_address** (*string*): The address that you would like to open the dispenser on.
   * **status** (*integer*): The state of the dispenser. 0 for open, 1 for open using open_address, 10 for closed.
   * *NOTE: Additional (advanced) parameters for this call are documented [here](#advanced-create_-parameters).*
@@ -1081,7 +1081,7 @@ Issue a new asset, issue more of an existing asset, lock an asset, or transfer t
     issued for the asset.
   * A named asset has an issuance cost of 0.5 XDP.
   * A subasset has an issuance cost of 0.25 XDP.
-  * In order to issue an asset, BTC and XDP (for first time, non-free Dogeparty assets) are required at the source address to pay fees.
+  * In order to issue an asset, DOGE and XDP (for first time, non-free Dogeparty assets) are required at the source address to pay fees.
 
 
 
@@ -1099,7 +1099,7 @@ Issue an order request.
   * **get_asset** (*string*): The [assets](#assets) requested in return.
   * **get_quantity** (*integer*): The [quantities](#quantities-and-balances) of the asset requested in return.
   * **expiration** (*integer*): The number of blocks for which the order should be valid.
-  * **fee_required** (*integer*): The miners’ fee required to be paid by orders for them to match this one; in BTC; required only if buying BTC (may be zero, though)
+  * **fee_required** (*integer*): The miners’ fee required to be paid by orders for them to match this one; in DOGE; required only if buying DOGE (may be zero, though)
   * *NOTE: Additional (advanced) parameters for this call are documented [here](#advanced-create_-parameters).*
 
 **Return:**
@@ -1166,8 +1166,8 @@ Each `create_` call detailed below can take the following common keyword paramet
   * **fee_provided** (*integer*): If you would like to specify a maximum fee (up to and including which may be used as the transaction fee), specify it here (in satoshi). This differs from `fee` in that this is an upper bound value, which `fee` is an exact value.
   * **custom_inputs** (*list*): Use only these specific UTXOs as inputs for the transaction being created. If specified, this parameter is a list of (JSON-encoded) UTXO objects, whose properties match those as retrieved by `listunspent` function from dogecoind (e.g. see [here](https://chainquery.com/dogecoin-api/listunspent)). Note that the actual UTXOs used may be a subset of this list.
   * **unspent_tx_hash** (*string*): When compiling the UTXOs to use as inputs for the transaction being created, only consider unspent outputs from this specific transaction hash. Defaults to `null` to consider all UTXOs for the address. Do not use this parameter if you are specifying `custom_inputs`.
-  * **regular_dust_size** (*integer*): Specify (in satoshi) to override the (dust) amount of BTC used for each non-(bare) multisig output. Defaults to `5430` satoshi.
-  * **multisig_dust_size** (*integer*): Specify (in satoshi) to override the (dust) amount of BTC used for each (bare) multisig output. Defaults to `7800` satoshi.
+  * **regular_dust_size** (*integer*): Specify (in satoshi) to override the (dust) amount of DOGE used for each non-(bare) multisig output. Defaults to `5430` satoshi.
+  * **multisig_dust_size** (*integer*): Specify (in satoshi) to override the (dust) amount of DOGE used for each (bare) multisig output. Defaults to `7800` satoshi.
   * **dust_return_pubkey** (*string*): The dust return pubkey is used in multi-sig data outputs (as the only real pubkey) to make those the outputs spendable. By default, this pubkey is taken from the pubkey used in the first transaction input. However, it can be overridden here (and is _required_ to be specified if a P2SH input is used and multisig is used as the data output encoding.) If specified, specify the public key (in hex format) where dust will be returned to so that it can be reclaimed. Only valid/useful when used with transactions that utilize multisig data encoding. Note that if this value is set to `false`, this instructs `dogeparty-server` to use the default dust return pubkey configured at the node level. If this default is not set at the node level, the call will generate an exception.
   * **disable_utxo_locks** (*boolean*): By default, UTXO's utilized when creating a transaction are "locked" for a few seconds, to prevent a case where rapidly generating `create_` calls reuse UTXOs due to their spent status not being updated in dogecoind yet. Specify `true` for this parameter to disable this behavior, and not temporarily lock UTXOs.
   * **op_return_value** (*integer*): The value (in satoshis) to use with any `OP_RETURN` outputs in the generated transaction. Defaults to `0`. Don't use this, unless you like [throwing your money away](https://m.reddit.com/r/Dogecoin/comments/2plfsv/what_happens_to_the_value_of_a_coin_locked_with/cmxrnhu).
@@ -1244,7 +1244,7 @@ URL format:
 
 Example query:
 
-`/rest/send/compose?source=mn6q3dS2EnDUx3bmyWc6D4szJNVGtaR7zc&destination=mtQheFaSfWELRB2MyMBaiWjdDm6ux9Ezns&asset=BTC&quantity=1`
+`/rest/send/compose?source=mn6q3dS2EnDUx3bmyWc6D4szJNVGtaR7zc&destination=mtQheFaSfWELRB2MyMBaiWjdDm6ux9Ezns&asset=DOGE&quantity=1`
 
 **Parameters:**
   * **message_type** (*string*): The type of desired transaction message. List of all available transactions:
@@ -1338,9 +1338,9 @@ An object that describes a specific occurance of a broadcast event (i.e. creatin
 * **validity** (*string*): Set to "valid" if a valid broadcast. Any other setting signifies an invalid/improper broadcast
 
 
-###BTCPay Object
+###DOGEPay Object
 
-An object that matches a request to settle an Order Match for which BTC is owed:
+An object that matches a request to settle an Order Match for which DOGE is owed:
 
 * **tx_index** (*integer*): The transaction index
 * **tx_hash** (*string*): The transaction hash
@@ -1358,8 +1358,8 @@ An object that describes an instance of a specific burn:
 * **tx_hash** (*string*): The transaction hash
 * **block_index** (*integer*): The block index (block number in the block chain)
 * **source** (*string*): The address the burn was performed from
-* **burned** (*integer*): The [quantities](#quantities-and-balances) of BTC burned
-* **earned** (*integer*): The [quantities](#quantities-and-balances) of XPC actually earned from the burn (takes into account any bonus quantitys, 1 BTC limitation, etc)
+* **burned** (*integer*): The [quantities](#quantities-and-balances) of DOGE burned
+* **earned** (*integer*): The [quantities](#quantities-and-balances) of XPC actually earned from the burn (takes into account any bonus quantitys, 1 DOGE limitation, etc)
 * **validity** (*string*): Set to "valid" if a valid burn. Any other setting signifies an invalid/improper burn
 
 
@@ -1432,8 +1432,8 @@ An object that describes a specific order:
 * **get_remaining** (*integer*): The [quantities](#quantities-and-balances) of the specified get asset remaining for the order
 * **price** (*float*): The given exchange rate (as an exchange ratio desired from the asset offered to the asset desired)
 * **expiration** (*integer*): The number of blocks over which the order should be valid
-* **fee_provided** (*integer*): The miners' fee provided; in BTC; required only if selling BTC (should not be lower than is required for acceptance in a block)
-* **fee_required** (*integer*): The miners' fee required to be paid by orders for them to match this one; in BTC; required only if buying BTC (may be zero, though)
+* **fee_provided** (*integer*): The miners' fee provided; in DOGE; required only if selling DOGE (should not be lower than is required for acceptance in a block)
+* **fee_required** (*integer*): The miners' fee required to be paid by orders for them to match this one; in DOGE; required only if buying DOGE (may be zero, though)
 
 
 ###Order Match Object
