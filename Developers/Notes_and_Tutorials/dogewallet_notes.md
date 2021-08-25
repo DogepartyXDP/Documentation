@@ -1,13 +1,13 @@
-# More on multiple Counterwallet servers
+# More on multiple Dogewallet servers
 
-For the time being, the Counterparty team itself operates the primary Counterwallet platform at `counterwallet.io`. However, as Counterwallet is open source software, it is possible to host your own site with Counterwallet site (for your personal use, or as an offering to others), or to even host your own Counterwallet servers to use with your own Counterparty wallet implementation. The Counterparty team supports and encourages this kind of activity (as long as the servers are secure), as it aids with increasing decentralization.
+For the time being, the Dogeparty team itself operates the primary Dogewallet platform at `wallet.dogeparty.net`. However, as Dogewallet is open source software, it is possible to host your own site with Dogewallet site (for your personal use, or as an offering to others), or to even host your own Dogewallet servers to use with your own Dogeparty wallet implementation. The Dogeparty team supports and encourages this kind of activity (as long as the servers are secure), as it aids with increasing decentralization.
         
-Also note that due to the nature of Counterwallet being a deterministic wallet, users using one Counterwallet platform (i.e. the official one, for instance) have the flexibility to start using a different Counterwallet platform instead at any time, and as funds (i.e. private keys) are not stored on the server in any fashion, they will be able to see their funds on either. (Note that the only thing that will not migrate are saved preferences, such as address aliases, the theme setting, etc.)
+Also note that due to the nature of Dogewallet being a deterministic wallet, users using one Dogewallet platform (i.e. the official one, for instance) have the flexibility to start using a different Dogewallet platform instead at any time, and as funds (i.e. private keys) are not stored on the server in any fashion, they will be able to see their funds on either. (Note that the only thing that will not migrate are saved preferences, such as address aliases, the theme setting, etc.)
 
-# Counterwallet MultiAPI specifics
+# Dogewallet MultiAPI specifics
 
-Counterwallet utilizes a sort of a "poor man's load balancing/failover" implementation called multiAPI (and implemented
-[here](https://github.com/CounterpartyXCP/counterwallet/blob/master/src/js/util.api.js)). multiAPI can operate in a number of fashions.
+Dogewallet utilizes a sort of a "poor man's load balancing/failover" implementation called multiAPI (and implemented
+[here](https://github.com/DogepartyXDP/dogewallet/blob/master/src/js/util.api.js)). multiAPI can operate in a number of fashions.
 
 **multiAPIFailover for Read API (``get_``) Operations**
 
@@ -17,24 +17,24 @@ list is called, and so on. The result of the first server to successfully return
 
 Here, a "hacked" server could be modified to return bogus data. As (until being discovered) the server would be in the
 shuffled list, some clients may end up consulting it. However, as this functionality is essentially for data queries only,
-the worse case result is that a Counterwallet client is shown incorrect/modified data which leads to misinformed actions
+the worse case result is that a Dogewallet client is shown incorrect/modified data which leads to misinformed actions
 on the user's behalf. Moreover, the option always exists to move all read-queries to use multiAPIConsensus in the future should the need arise.
 
 **multiAPIConsensus for Action/Write (``create_``) Operations**
 
 Based on this multiAPI capability, the wallet itself consults more than one of these Federated Nodes via consensus especially
-for all ``create_``-type operations. For example, if you send XCP, `counterparty-server` on each server is still composing and sending
+for all ``create_``-type operations. For example, if you send XDP, `dogeparty-server` on each server is still composing and sending
 back the unsigned raw transaction, but for data security, it compares the results returned from all servers, and will 
 only sign and broadcast (both client-side) if all the results match). This is known as *multiAPIConsensus*.
 
 The ultimate goal here is to have a federated net of semi-trusted backend servers not tied to any one country, provider, network or
 operator/admin. Through requiring consensus on the unsigned transactions returned for all ``create_`` operations, 'semi-trust'
 on a single server basis leads to an overall trustworthy network. Worst case, if backend server is hacked and owned
-(and the `counterparty-server` code modified), then you may get some invalid read results, but it won't be rewriting your XCP send
+(and the `dogeparty-server` code modified), then you may get some invalid read results, but it won't be rewriting your XDP send
 destination address, for example. The attackers would have to hack the code on every single server in the same exact
 way, undetected, to do that.
 
-Moreover, the Counterwallet web client contains basic transaction validation code that will check that any unsigned Bitcoin
+Moreover, the Dogewallet web client contains basic transaction validation code that will check that any unsigned Bitcoin
 transaction returned from a Counterblock Federated Node contains expected inputs and outputs. This provides further
 protection against potential attacks.
 
