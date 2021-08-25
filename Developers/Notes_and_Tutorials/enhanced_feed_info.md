@@ -69,7 +69,7 @@ Here's an example for a binary feed called <b>Superbowl 2014</b>:
 <blockquote><pre>
 {
     "version": "1.0",
-    "address": "muYJYjRZDPmTEMfyEGe34BGN8tZ6rmRZCu",
+    "address": "DQSQpEqpZwQktMf8REGEBVw5BBywo6trVR",
     "type": "binary",
     "category": "sports",
     "title": "Superbowl 2014",
@@ -135,6 +135,6 @@ If the information you provided is reachable and valid (within a 5 second respon
 
 ###Validating your JSON data
 
-Your JSON data must respect and validate against [this](https://github.com/CounterpartyXCP/counterblock/blob/master/counterblock/schemas/feed.schema.json) JSON schema. If the validation fails on any level, counterblockd will not accept the data.
+Your JSON data must respect and validate against [this](https://github.com/DogepartyXDP/dogeblock/blob/master/dogeblock/schemas/feed.schema.json) JSON schema. If the validation fails on any level, counterblockd will not accept the data.
 
 To check your data against this schema, go [here](http://json-schema-validator.herokuapp.com/). Paste the schema from the link above into the '''Schema''' field, and place your example output into the '''Data''' field. Then click the '''Validate''' button.
