@@ -378,11 +378,11 @@ The process of signing and broadcasting a transaction, from start to finish, dep
 	    return tx_hash
 
 **Dogecoin Core with Javascript**
-(Utilizing the [Counterwallet Bitcore wrapper code](https://raw.githubusercontent.com/DogepartyXDP/dogewallet/master/src/js/util.bitcore.js) for brevity.)
+(Utilizing the [Dogewallet Dogecore wrapper code](https://raw.githubusercontent.com/DogepartyXDP/dogewallet/master/src/js/util.dogecore.js) for brevity.)
 
     <html>
         <script src="https://raw.githubusercontent.com/bitpay/bitcore-lib/f031e1ddfbf0064ef503a28aada86c4fbf9a414c/bitcore-lib.min.js"></script>
-        <script src="https://raw.githubusercontent.com/DogepartyXDP/dogewallet/master/src/js/util.bitcore.js"></script>
+        <script src="https://raw.githubusercontent.com/DogepartyXDP/dogewallet/master/src/js/util.doge.js"></script>
         <script src="https://raw.githubusercontent.com/DogepartyXDP/dogewallet/master/src/js/external/mnemonic.js"></script>
         <script>
         dogeparty_api = function(method, params) {
