@@ -50,7 +50,7 @@ Technically, the process is rather straightforward. However, as Dogeparty is not
 
 ## Batching Withdrawals (Multi-Peer-Multi-Asset Send)
 
-* This multi-send feature is not yet supported until dogecoin core supports segregated witness support *
+* This multi-send feature is not yet supported until dogecoin core supports segregated witness support*
 - Prime the holding address if its current balance is below 0.0005 BTC.
 
 - Generate first MPMA transaction by making a `create_send` (Dogeparty API) call and specify as many assets and recipient addresses as you would like.
