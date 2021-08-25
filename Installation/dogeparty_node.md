@@ -7,7 +7,7 @@ This document describes how one can set up their own Dogeparty "Doge Node" syste
 A Doge Node is a self-contained system that runs the some or all of the Dogeparty software stack, via Docker. Each system operates as a Dogecoin and Dogeparty "full node". Using this toolset, one can generally get started running the Dogeparty software much quicker and more easily than a manual installation of the various components.
 
 The document is primarily intended for power users and developers.
-
+ 
 ### Node Services
 <a name="services"></a>
 Services run on a Federated Node include some or all of the following:
@@ -17,7 +17,6 @@ Services run on a Federated Node include some or all of the following:
 * **dogewallet**: The reference Web wallet for Dogeparty. This is a collection of HTML, CSS and javascript resources, served by `nginx`.
 * **dogecoind**: Reference Dogecoin implementation, used by `dogeparty-server` to sync to the Dogecoin blockchain.
 * **addrindexrs**: Dogecoin address index service. Maintains an updated database of UTXOs for usage in the dogeparty services.
-* **armory_utxsvr**: A service used by ``dogeblock`` with Counterwallet to support [Offline Armory transactions](http://dogeparty.io/docs/create_armory_address/). This service requires Armory itself, which is automatically installed as part of the Federated Node setup procedure.
 * **nginx**: Reverse proxies `dogewallet` access. Not used with `dogeparty-server`-only or `dogeblock`-only nodes.
 * **mongodb and redis**: Used by `dogeblock`.
 
@@ -31,7 +30,6 @@ Please note that Federated Node should not be installed on a system which alread
     - For ``dogecoin`` databases: **~361GB** (mainnet), **~32GB** (testnet)
     - For ``addrindexrs`` database: **~63GB** (mainnet), **~6GB** (testnet)
     - For ``dogeparty`` databases: **~5GB** (mainnet), **~1GB** (testnet)
-    - For ``armory_utxsvr``: **~291GB** (mainnet), **~26GB** (testnet)
 - **OS:** *Please note that Ubuntu Linux is the recommended OS at this time, as most of our testing is performed on it. Windows and OS X support is considered in BETA.*
     - **Linux**: We recommend Ubuntu 20.10 64-bit, but other, modern versions of Linux should work, as long as they support the newest released version of Docker
     - **Windows**: Windows 7 or higher, or Server 2008 or higher. 64-bit required
@@ -88,13 +86,9 @@ sudo apt-get update && sudo apt-get upgrade
 sudo apt-get -y install git curl coreutils
 ```
 
-Install docker-ce and docker-compose (see [here](https://docs.docker.com/compose/install/) for more info, here we use v1.16.1):
+Install docker and docker-compose (see [here](https://docs.docker.com/compose/install/) for more info, here we use v1.16.1):
 ```
-sudo -i # become root
-curl -fsSL https://get.docker.com/ | sh
-curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
-exit # leave root shell
+sudo apt-get -y install docker docker-compose
 ```
 
 ## Installation
@@ -183,8 +177,8 @@ dogenode tail dogeparty
 
 Once running, the system listens on the following ports:
 
-* `dogeparty-server`: 4000/tcp (mainnet), 14000/tcp (testnet)
-* `dogeblock`: 4001/tcp (mainnet), 14001/tcp (testnet)
+* `dogeparty-server`: 4005/tcp (mainnet), 14005/tcp (testnet)
+* `dogeblock`: 4105/tcp (mainnet), 14105/tcp (testnet)
 
 For `dogeparty-server`, use RPC username `rpc` and default password `rpc`.
 
@@ -327,8 +321,6 @@ dogenode update <service>
 * `dogeparty-testnet`
 * `dogeblock`
 * `dogeblock-testnet`
-* `armory_utxsvr`
-* `armory_utxsvr-testnet`
 * `dogewallet`
 
 **Reparsing blockchain data**
