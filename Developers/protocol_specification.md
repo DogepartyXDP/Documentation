@@ -8,11 +8,11 @@ Dogeparty is a suite of financial tools in a protocol built on top of
 the Dogecoin blockchain and using the blockchain as a service for the
 reliable publication and timestamping of its messages.
 
-The reference implementation is ``dogeparty-lib``, which is hosted at [GitHub](https://github.com/DogepartyXDP/dogepartyd).
+The reference implementation is ``dogeparty-lib``, which is hosted at [GitHub](https://github.com/DogepartyXDP/dogeparty-lib).
 
 This document describes exclusively the latest version of the
 Dogeparty protocol. For historical protocol changes, see the
-dogeparty-lib [ChangeLog](https://github.com/DogepartyXDP/dogepartyd/blob/master/ChangeLog.md).
+dogeparty-lib [ChangeLog](https://github.com/DogepartyXDP/dogeparty-lib/blob/master/ChangeLog.md).
 
 Transactions
 ------------
@@ -371,17 +371,7 @@ There is a small anti-spam fee of 0.0002 XDP per recipient with dividends.
 
 Balances in Dogeparty’s native currency, ‘XDP’, will be initialised
 by ‘burning’ dogecoins in miners’ fees during a particular period of time
-using the a **burn** message type. The number of XDP earned per dogecoin
-is calculated thus:
-
-    XDP_EARNED = DOGE_BURNED * (1000 * (1 + .5 *
-                 ((END_BLOCK - CURRENT_BLOCK) / (END_BLOCK - START_BLOCK))
-                 ))
-
-
-``END_BLOCK`` is the block after which the burn period is over (**block #283810**) and ``START_BLOCK`` is the block with which the burn period
-begins (**block #278310**). The earlier the burn, the better the price,
-which may be between 1000 and 1500 XDP/DOGE.
+using the a **burn** message type. 
 
 Burn messages have precisely the string ‘ProofOfBurn’ stored in the
 ``OP_RETURN`` output.
@@ -400,8 +390,8 @@ made an offer may cancel it.
 
 ###Destroy
 
-A **destroy** message sends a quantity of any Dogeparty asset from the
-source address to the default burn address. If the sender does not hold a
+A **destroy** message destorys a quantity of any Dogeparty asset from the
+source address and updates the total supply. If the sender does not hold a
 sufficient quantity of that asset at the time that the destroy message is
 parsed (in the sequence of transactions), then the destroy is considered
 invalid.
