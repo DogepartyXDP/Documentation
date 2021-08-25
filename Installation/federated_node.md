@@ -15,7 +15,7 @@ Services run on a Federated Node include some or all of the following:
 * **dogeparty-server**: `dogeparty-lib` + `dogeparty-cli`. Implements support for the core Dogeparty protocol, via a provided REST API and command line interface.
 * **dogeblock**: Provides additional services (required by `dogewallet` and potentially other services) beyond those offered in the API provided by `dogeparty-server`. It features a full-fledged JSON RPC-based API, and has an extensible architecture to support custom plugins.
 * **dogewallet**: The reference Web wallet for Dogeparty. This is a collection of HTML, CSS and javascript resources, served by `nginx`.
-* **bitcoind**: Reference Dogecoin implementation, used by `dogeparty-server` to sync to the Dogecoin blockchain.
+* **dogecoind**: Reference Dogecoin implementation, used by `dogeparty-server` to sync to the Dogecoin blockchain.
 * **addrindexrs**: Dogecoin address index service. Maintains an updated database of UTXOs for usage in the dogeparty services.
 * **armory_utxsvr**: A service used by ``dogeblock`` with Counterwallet to support [Offline Armory transactions](http://dogeparty.io/docs/create_armory_address/). This service requires Armory itself, which is automatically installed as part of the Federated Node setup procedure.
 * **nginx**: Reverse proxies `dogewallet` access. Not used with `dogeparty-server`-only or `dogeblock`-only nodes.
@@ -26,9 +26,9 @@ Please note that Federated Node should not be installed on a system which alread
 ### Hardware / OS requirements
 <a name="requirements"></a>
 
-- **Memory**: 4GB RAM (`bitcoind`, `dogeparty-server` only), 8GB+ RAM (full stack)
+- **Memory**: 4GB RAM (`dogecoind`, `dogeparty-server` only), 8GB+ RAM (full stack)
 - **Disk space:** The exact disk space required will be dependent on what services are run on the node:
-    - For ``bitcoin`` databases: **~361GB** (mainnet), **~32GB** (testnet)
+    - For ``dogecoin`` databases: **~361GB** (mainnet), **~32GB** (testnet)
     - For ``addrindexrs`` database: **~63GB** (mainnet), **~6GB** (testnet)
     - For ``dogeparty`` databases: **~5GB** (mainnet), **~1GB** (testnet)
     - For ``armory_utxsvr``: **~291GB** (mainnet), **~26GB** (testnet)
@@ -41,7 +41,7 @@ Please note that Federated Node should not be installed on a system which alread
 
 ### Windows
 
-**NOTE**: Installation on Windows is still in *BETA* state, and we cannot promise a fully-working environment. [Please report](https://github.com/DogepartyXCP/federatednode/issues) any bugs you find.
+**NOTE**: Installation on Windows is still in *BETA* state, and we cannot promise a fully-working environment. [Please report](https://github.com/DogepartyXDP/dogenode/issues) any bugs you find.
 
 * **Python 3.5.x**: [Download and install](https://www.python.org/downloads/) the latest Python 3.5.x release. Make sure you check the box "Add Python 3.5 to PATH" on the first page. (If you get an error during installation, make sure your windows system is fully updated via Windows Update.)
 * **Docker**: If using Windows 10, we recommend to [install Docker for Windows](https://docs.docker.com/engine/installation/windows/). For all other versions of Windows, [install Docker Toolbox](https://docs.docker.com/toolbox/toolbox_install_windows/).
@@ -50,7 +50,7 @@ Please note that Federated Node should not be installed on a system which alread
 **If using Docker for Windows**:
 
 * After installing Docker for Windows, launch the "Docker" application and allow it to set itself up (a reboot may be required).
-* Next, you will need to enable access to your host hard drive so that some of the shared volumes work properly. To do this, right click on the Docker Whale icon in your system tray. Then go to "Docker Settings" and then "Shared Drives". Turn on access to the drive on which the `federatednode` folder will reside (most likely your "C" drive).
+* Next, you will need to enable access to your host hard drive so that some of the shared volumes work properly. To do this, right click on the Docker Whale icon in your system tray. Then go to "Docker Settings" and then "Shared Drives". Turn on access to the drive on which the `dogenode` folder will reside (most likely your "C" drive).
 * Finally, launch [a command prompt as Administrator](https://technet.microsoft.com/en-us/library/cc947813(v=ws.10).aspx)
 
 <a name="docker-toolbox-note"></a> **If using Docker Toolbox**:
@@ -103,10 +103,10 @@ On Linux and OS X, install as a non-root sudo-er from home directory.
 
 **Clone and check out the code**
 
-On all OS, clone federatednode repo and enter cloned directory:
+On all OS, clone dogenode repo and enter cloned directory:
 ```
-git clone https://github.com/DogepartyXCP/federatednode.git
-cd federatednode
+git clone https://github.com/DogepartyXDP/dogenode.git
+cd dogenode
 ```
 
 On Linux and OS X:
@@ -135,7 +135,7 @@ dogenode install <CONFIG> <BRANCH>
 
 Where `<CONFIG>` is one of the following:
 
-* **`base`** if you want to run `dogeparty-server` and `bitcoind` only
+* **`base`** if you want to run `dogeparty-server` and `dogecoind` only
 * **`dogeblock`** if you want to run everything in `base`, with the addition of `dogeblock` and its dependencies (`mongodb` and `redis`)
 * **`full`** if you would like to run a *full federated node configuration*, which is all services on the [list above](#services)
 
@@ -169,13 +169,13 @@ After installation, the services will be automatically started. To check the sta
 dogenode ps
 ```
 
-If you have existing instances of Dogecoin Core (either mainnet or testnet), at this point you could stop all services listed in `dogenode ps` output, change configuration files (of dogeparty and dogeblock, for example) and point them to your existing Dogecoin Core. Configuration files can be found in various service directories located under federatednode/config.
+If you have existing instances of Dogecoin Core (either mainnet or testnet), at this point you could stop all services listed in `dogenode ps` output, change configuration files (of dogeparty and dogeblock, for example) and point them to your existing Dogecoin Core. Configuration files can be found in various service directories located under dogenode/config.
 
-Once the containers are installed and running, keep in mind that it will take some time for `bitcoind` to download the blockchain data. Once this is done, `dogeparty-server` will fully start and sync, followed by `dogeblock` (if in use). At that point, the server will be usable.
+Once the containers are installed and running, keep in mind that it will take some time for `dogecoind` to download the blockchain data. Once this is done, `dogeparty-server` will fully start and sync, followed by `dogeblock` (if in use). At that point, the server will be usable.
 
 You may check the sync status by tailing the appropriate service logs, e.g. for Dogecoin Core and Dogeparty server on mainnet:
 ```
-dogenode tail bitcoin
+dogenode tail dogecoin
 dogenode tail dogeparty
 ```
 
@@ -198,7 +198,7 @@ If `dogewallet` is installed, access to the following URLs will be possible:
 
 Ensure that your firewall software is enabled. If you want to provide access from external systems, you can allow through some or all of the [appropriate ports](#accessing). In addition, if you are running a node in a production scenario, it is recommended that you properly secure it.
 
-You may also want to tighten ownership and permissions on all conf files in federatednode/config subdirectories, but keep in mind that you should be the only user with access to the operating system that runs Federated Node containers: Federated Node is not designed for shared OS environments.
+You may also want to tighten ownership and permissions on all conf files in dogenode/config subdirectories, but keep in mind that you should be the only user with access to the operating system that runs Federated Node containers: Federated Node is not designed for shared OS environments.
 
 **Ubuntu Linux**
 
@@ -208,7 +208,7 @@ cd extras/host_security
 sudo ./run.py
 ```
 
-Note that this script will make several modifications to your host system as it runs. Please review what it does [here](https://github.com/DogepartyXCP/federatednode/blob/master/extras/host_security/run.py) before using it.
+Note that this script will make several modifications to your host system as it runs. Please review what it does [here](https://github.com/DogepartyXDP/dogenode/blob/master/extras/host_security/run.py) before using it.
 
 If you expect to run a busy Federated Node that requires dogeblock, you can consider making the following performance tweaks for mongodb and redis. Please do not make these changes to the host if you're not comfortable with them because they impact not only Docker but the entire OS.
 
@@ -226,30 +226,30 @@ dogenode ps
 
 **Modifying configurations**
 
-Configuration files for the `bitcoin`, `dogeparty` and `dogeblock` services are stored under `federatednode/config/` and may be freely edited. The various locations are as follows:
+Configuration files for the `dogecoin`, `dogeparty` and `dogeblock` services are stored under `dogenode/config/` and may be freely edited. The various locations are as follows:
 
-* `bitcoin`: See `federatednode/config/bitcoin/bitcoin.conf`
-* `bitcoin-testnet`: See `federatednode/config/bitcoin/bitcoin.testnet.conf`
-* `dogeparty`: See `federatednode/config/dogeparty/server.conf`
-* `dogeparty-testnet`: See `federatednode/config/dogeparty/server.testnet.conf`
-* `dogeblock`: See `federatednode/config/dogeblock/server.conf`
-* `dogeblock-testnet`: See `federatednode/config/dogeblock/server.testnet.conf`
+* `dogecoin`: See `dogenode/config/dogecoin/dogecoin.conf`
+* `dogecoin-testnet`: See `dogenode/config/dogecoin/dogecoin.testnet.conf`
+* `dogeparty`: See `dogenode/config/dogeparty/server.conf`
+* `dogeparty-testnet`: See `dogenode/config/dogeparty/server.testnet.conf`
+* `dogeblock`: See `dogenode/config/dogeblock/server.conf`
+* `dogeblock-testnet`: See `dogenode/config/dogeblock/server.testnet.conf`
 * `redis`: shared service used for both mainnet and testnet
 * `mongodb`: shared service used for both mainnet and testnet
 
 Remember: once done editing a configuration file, you must `restart` the corresponding service. Also, please don't change port or usernames/passwords if the configuration files unless you know what you are doing (as the services are coded to work together smoothly with specific values).
 
-For example, a user with base setup (Dogecoin Core & Dogeparty Server) could make Dogeparty use existing Dogecoin Core by changing configuration files found under federatednode/config/dogeparty/ (`backend-connect` in Dogeparty server configuration files and `wallet-connect` in client configuration files.) At this point Dogecoin Core (mainnet and/or testnet) container(s) could be stopped and dogeparty server container restarted. If your existing Dogecoin Server allows RPC connections, with proper settings and correct RPC credentials in their configuration files, dogeparty (server), dogeblock and dogewallet can all use it so that you don't have to run bitcoin or bitcoin-testnet container.
+For example, a user with base setup (Dogecoin Core & Dogeparty Server) could make Dogeparty use existing Dogecoin Core by changing configuration files found under dogenode/config/dogeparty/ (`backend-connect` in Dogeparty server configuration files and `wallet-connect` in client configuration files.) At this point Dogecoin Core (mainnet and/or testnet) container(s) could be stopped and dogeparty server container restarted. If your existing Dogecoin Server allows RPC connections, with proper settings and correct RPC credentials in their configuration files, dogeparty (server), dogeblock and dogewallet can all use it so that you don't have to run dogecoin or dogecoin-testnet container.
 
 **Viewing/working with stored data**
 
 The various services use [Docker named volumes](https://docs.docker.com/engine/tutorials/dockervolumes/) to store data that is meant to be persistent:
 
-* `bitcoin` and `bitcoin-testnet`: Stores blockchain data in the `federatednode_bitcoin-data` volume
-* `addrindexrs` and `addrindexrs-testnet`: Stores index data in the `federatednode_addrindexrs-data` volume
-* `dogeparty` and `dogeparty-testnet`: Stores Dogeparty databases in the `federatednode_dogeparty-data` volume
-* `dogeblock` and `dogeblock-testnet`: Stores Counterblock asset info (images), etc in the `federatednode_dogeblock-data` volume
-* `mongodb`: Stores the databases for `dogeblock` and `dogeblock-testnet` in the `federatednode_mongodb-data` volume
+* `dogecoin` and `dogecoin-testnet`: Stores blockchain data in the `dogenode_dogecoin-data` volume
+* `addrindexrs` and `addrindexrs-testnet`: Stores index data in the `dogenode_addrindexrs-dc-data` volume
+* `dogeparty` and `dogeparty-testnet`: Stores Dogeparty databases in the `dogenode_dogeparty-data` volume
+* `dogeblock` and `dogeblock-testnet`: Stores Counterblock asset info (images), etc in the `dogenode_dogeblock-data` volume
+* `mongodb`: Stores the databases for `dogeblock` and `dogeblock-testnet` in the `dogenode_mongodb-data` volume
 
 Use `docker volume inspect <volume-name>` to display volume location. See `docker volume --help` for help on how to interact with Docker volumes.
 
@@ -269,14 +269,12 @@ dogenode logs <service>
 
 * `dogeparty` (`dogeparty-server` mainnet)
 * `dogeblock` (`dogeblock` mainnet)
-* `bitcoin` (`bitcoin` mainnet)
+* `dogecoin` (`dogecoin` mainnet)
 * `addrindexrs` (`addrindexrs` mainnet)
-* `armory_utxsvr` (`armory_utxsvr` mainnet)
 * `dogeparty-testnet`
 * `dogeblock-testnet`
-* `bitcoin-testnet`
+* `dogecoin-testnet`
 * `addrindexrs-testnet`
-* `armory_utxsvr-testnet`
 * `dogewallet`
 
 **Stopping and restarting containers**
@@ -301,8 +299,8 @@ Where `<service>` is one of the service names listed [above](#servicenames), and
 
 For example:
 ```
-dogenode exec dogeparty dogeparty-client send --source=12u4Vymr3bGTywjMQDgBkwAnazwQuDqzJG --destination=1AanCo9CJSomhUEy2YrhfXrU1PboBhFaBq --quantity=1.5 --asset=XCP
-dogenode exec bitcoin-testnet bitcoin-cli getpeerinfo
+dogenode exec dogeparty dogeparty-client send --source=DJDog8zPScfL6dXawkdYDfiQDnGqSUrA4P --destination=DJDog8zPScfL6dXawkdYDfiQDnGqSUrA4P --quantity=1.5 --asset=XDP
+dogenode exec dogecoin-testnet dogecoin-cli getpeerinfo
 dogenode exec dogeblock ls /root
 ```
 
@@ -363,7 +361,7 @@ dogenode uninstall
 
 ## Component development
 
-The system allows for easy development and modification of the Dogeparty software components. To do so, simply update code in the directories under `federatednode/src/` as you see fit. These directories are mapped into the appropriate containers, overlaying (overriding) the source code that the container ships with. This, along with symlinked (develop) Python package installations makes it possible to work on code in-place, with just a service restart necessary to have the changes take effect.
+The system allows for easy development and modification of the Dogeparty software components. To do so, simply update code in the directories under `dogenode/src/` as you see fit. These directories are mapped into the appropriate containers, overlaying (overriding) the source code that the container ships with. This, along with symlinked (develop) Python package installations makes it possible to work on code in-place, with just a service restart necessary to have the changes take effect.
 
 Once done updating the source code for a particular service, issue the following command(s) to restart the container with the new code:
 ```
@@ -392,7 +390,7 @@ By default, the system is set up to use a self-signed SSL certificate. If you ar
 you should get your own SSL certificate from your DNS registrar so that your users don't see a certificate warning when
 they visit your site.
 
-Once you have that certificate, create a nginx-compatible ``.pem`` file. Copy that `.pem` file to `federatednode/config/dogewallet/ssl/dogewallet.pem` and the cooresponding certificate `.key` file to `federatednode/config/dogewallet/ssl/dogewallet.key`. (Note that there will be a `dogewallet.key` and `dogewallet.pem` file already there, which are the default, self-signed certificates, and can be safely overridden.) Then, restart the `dogewallet` service for the new certificate to take effect.
+Once you have that certificate, create a nginx-compatible ``.pem`` file. Copy that `.pem` file to `dogenode/config/dogewallet/ssl/dogewallet.pem` and the cooresponding certificate `.key` file to `dogenode/config/dogewallet/ssl/dogewallet.key`. (Note that there will be a `dogewallet.key` and `dogewallet.pem` file already there, which are the default, self-signed certificates, and can be safely overridden.) Then, restart the `dogewallet` service for the new certificate to take effect.
 
 
 ### Monitoring the Server
@@ -424,7 +422,7 @@ If ``nginx`` is not working properly, either a HTTP 5xx response, or no response
 
 Counterwallet can be configured via editing the `dogewallet.conf.json` file, via issuing the following command:
 ```
-sudo docker exec -it federatednode_dogewallet_1 vim /dogewallet/dogewallet.conf.json
+sudo docker exec -it dogenode_dogewallet_1 vim /dogewallet/dogewallet.conf.json
 ```
 
 This file will contain a valid JSON-formatted object, containing an a number of possible configuration properties. For example::
