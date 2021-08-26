@@ -454,7 +454,7 @@ Examples:
 
 ###subassets
 
-See the [Dogeparty protocol specification](../protocol_specification#subassets) for what constitutes a valid subasset name.
+See the [Dogeparty protocol specification](https://github.com/DogepartyXDP/Documentation/blob/master/Developers/protocol_specification.md#subassets) for what constitutes a valid subasset name.
 Examples:
 
 - "PIZZA.X"
