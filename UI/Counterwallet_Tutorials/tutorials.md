@@ -1,10 +1,8 @@
-#Counterwallet Tutorials
+#Dogewallet Tutorials
 
-- [Get started with Counterwallet](getting_started_cw.md)
-- [Create a Counterwallet address](create_addresses.md)
+- [Get started with Dogewallet](getting_started_cw.md)
+- [Create a Dogewallet address](create_addresses.md)
 - [Trade on the decentralized exchange](trade.md)
-- [Create an Armory address](create_armory_address.md)
-- [Using multisig with Counterwallet](multisig_counterwallet.md)
 - [Display a QR code](show_qr_code.md)
 - [Get information about any token](get_token_info.md)
 - [Create a token](create_token.md)
