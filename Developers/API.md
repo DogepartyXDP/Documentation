@@ -1066,6 +1066,7 @@ Issue a new asset, issue more of an existing asset, lock an asset, or transfer t
   * **asset** (*string*): The [assets](#assets) to issue or transfer.  This can also be a [subasset longname](#subassets) for new subasset issuances.
   * **quantity** (*integer*): The [quantity](#quantities-and-balances) of the asset to issue (set to 0 if *transferring* an asset).
   * **divisible** (*boolean, default=true*): Whether this asset is divisible or not (if a transfer, this value must match the value specified when the asset was originally issued).
+  * **lock** (*boolean, default=false*): Whether this issuance is locking the supply and preventing issuing additional supply in the future
   * **description** (*string, default=''*): A textual description for the asset.
   * **transfer_destination** (*string, default=null*): The address to receive the asset (only used when *transferring* assets -- leave set to ``null`` if issuing an asset).
   * *NOTE: Additional (advanced) parameters for this call are documented [here](#advanced-create_-parameters).*
@@ -1076,9 +1077,6 @@ Issue a new asset, issue more of an existing asset, lock an asset, or transfer t
 
 **Notes:**
 
-  * To lock the issuance of the asset, specify "LOCK" for the ``description`` field. It's a special keyword that will
-    not change the actual description, but will simply lock the asset quantity and not allow additional quantity to be
-    issued for the asset.
   * A named asset has an issuance cost of 0.5 XDP.
   * A subasset has an issuance cost of 0.25 XDP.
   * In order to issue an asset, DOGE and XDP (for first time, non-free Dogeparty assets) are required at the source address to pay fees.
