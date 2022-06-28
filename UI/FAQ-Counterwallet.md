@@ -1,7 +1,23 @@
-Counterwallet FAQ
-==================
+# Counterwallet FAQ
 
-[TOC]
+- [What is Counterwallet?](#what-is-counterwallet)
+- [What are some of Counterwallet's features?](#what-are-some-of-counterwallets-features)
+- [Where can I access it?](#where-can-i-access-it)
+- [What is an Asset/Token/Coin? How can I store them?](#what-is-an-assettokencoin-how-can-i-store-them)
+- [I want to trade a certain asset, is it legitimate?](#i-want-to-trade-a-certain-asset-is-it-legitimate)
+- [Is Counterwallet down?](#is-counterwallet-down)
+- [Counterwallet is offline. Can I still access my funds?](#counterwallet-is-offline-can-i-still-access-my-funds)
+- [How does Counterwallet make profit?](#how-does-counterwallet-make-profit)
+- [Can I try Counterwallet on testnet?](#can-i-try-counterwallet-on-testnet)
+- [Can I use Counterwallet with Armory?](#can-i-use-counterwallet-with-armory)
+- [I logged in and my address is different, and I have no balance! Help!](#i-logged-in-and-my-address-is-different-and-i-have-no-balance-help)
+- [I sent BTC to Counterwallet, why doesn't it show up?](#i-sent-btc-to-counterwallet-why-doesnt-it-show-up)
+- [Why do I need small amounts of Bitcoin to do things in Counterwallet?](#why-do-i-need-small-amounts-of-bitcoin-to-do-things-in-counterwallet)
+- [Does Counterwallet support two-factor authentication?](#does-counterwallet-support-two-factor-authentication)
+- [What else do I need to know?](#what-else-do-i-need-to-know)
+- [Can I run my own Counterwallet server?](#can-i-run-my-own-counterwallet-server)
+- [I want to translate Counterwallet to my language](#i-want-to-translate-counterwallet-to-my-language)
+
 
 ## What is Counterwallet?
 

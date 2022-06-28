@@ -1,9 +1,96 @@
 # dogeparty-server API
 
-[TOC]
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+  - [General Format](#general-format)
+    - [JSON-RPC](#json-rpc)
+    - [REST](#rest)
+  - [Authentication](#authentication)
+- [Example Implementations for JSON RPC API](#example-implementations-for-json-rpc-api)
+  - [Python](#python)
+  - [PHP](#php)
+  - [curl](#curl)
+    - [Linux](#linux)
+    - [Windows](#windows)
+  - [c# (RestSharp)](#c-restsharp)
+  - [Go](#go)
+  - [Ruby (Net::HTTP)](#ruby-nethttp)
+- [Example Implementations for REST API](#example-implementations-for-rest-api)
+  - [Python](#python-1)
+  - [curl](#curl-1)
+    - [Linux](#linux-1)
+    - [Windows](#windows-1)
+- [Example Parameters](#example-parameters)
+- [Signing Transactions Before Broadcasting](#signing-transactions-before-broadcasting)
+- [Terms & Conventions](#terms--conventions)
+  - [assets](#assets)
+  - [subassets](#subassets)
+  - [Quantities and balances](#quantities-and-balances)
+  - [floats](#floats)
+  - [Memos](#memos)
+- [Miscellaneous](#miscellaneous)
+  - [Filtering Read API results](#filtering-read-api-results)
+- [Read API Function Reference](#read-api-function-reference)
+  - [get_{table}](#get_table)
+  - [get_asset_info](#get_asset_info)
+  - [get_supply](#get_supply)
+  - [get_asset_names](#get_asset_names)
+  - [get_holder_count](#get_holder_count)
+  - [get_holders](#get_holders)
+  - [get_messages](#get_messages)
+  - [get_messages_by_index](#get_messages_by_index)
+  - [get_block_info](#get_block_info)
+  - [get_blocks](#get_blocks)
+  - [get_running_info](#get_running_info)
+  - [get_element_counts](#get_element_counts)
+  - [get_unspent_txouts](#get_unspent_txouts)
+  - [getrawtransaction](#getrawtransaction)
+  - [getrawtransaction_batch](#getrawtransaction_batch)
+  - [search_raw_transactions](#search_raw_transactions)
+  - [get_tx_info](#get_tx_info)
+  - [search_pubkey](#search_pubkey)
+  - [unpack](#unpack)
+- [Action/Write API Function Reference](#actionwrite-api-function-reference)
+  - [create_bet](#create_bet)
+  - [create_broadcast](#create_broadcast)
+  - [create_dogepay](#create_dogepay)
+  - [create_burn](#create_burn)
+  - [create_cancel](#create_cancel)
+  - [create_destroy](#create_destroy)
+  - [create_dispenser](#create_dispenser)
+  - [create_dividend](#create_dividend)
+  - [create_issuance](#create_issuance)
+  - [create_order](#create_order)
+  - [create_send](#create_send)
+  - [create_sweep](#create_sweep)
+  - [Advanced `create_` parameters](#advanced-create_-parameters)
+    - [Transaction Encodings](#transaction-encodings)
+- [REST API Function Reference](#rest-api-function-reference)
+  - [get](#get)
+  - [compose](#compose)
+- [Objects](#objects)
+  - [Balance Object](#balance-object)
+  - [Bet Object](#bet-object)
+  - [Bet Match Object](#bet-match-object)
+  - [Broadcast Object](#broadcast-object)
+  - [DOGEPay Object](#dogepay-object)
+  - [Burn Object](#burn-object)
+  - [Cancel Object](#cancel-object)
+  - [Debit/Credit Object](#debitcredit-object)
+  - [Dividend Object](#dividend-object)
+  - [Issuance Object](#issuance-object)
+  - [Order Object](#order-object)
+  - [Order Match Object](#order-match-object)
+  - [Send Object](#send-object)
+  - [Message Object](#message-object)
+  - [Bet Expiration Object](#bet-expiration-object)
+  - [Order Expiration Object](#order-expiration-object)
+  - [Bet Match Expiration Object](#bet-match-expiration-object)
+  - [Order Match Expiration Object](#order-match-expiration-object)
+- [Status](#status)
+- [9.58.3](#9583)
 
-
-##Overview
+## Overview
 
 ``dogeparty-lib`` provides a JSON RPC 2.0-based API based off of
 that of Dogecoin Core. It is the primary means by which other applications
@@ -27,7 +114,7 @@ of Dogecoin Core's design. This REST API is still under development and will inc
 in the future, and listens on the same port as JSON RPC one.
 
 
-##Getting Started
+## Getting Started
 
 By default, the server will listen on port ``4005`` (if on mainnet) or port ``14005`` (on testnet) for API
 requests.
@@ -38,9 +125,9 @@ are made via a HTTP POST request to ``/api/`` (note the trailing slash), with JS
 The requests to the secondary REST API are made via HTTP GET to ``/rest/``, with request action and parameters encoded in the URL.
 
 
-###General Format
+### General Format
 
-####JSON-RPC
+#### JSON-RPC
 
 All requests must have POST data that is JSON encoded. Here's an example of the POST data for a valid API request:
 
@@ -62,19 +149,19 @@ You should note that the data in ``params`` is a JSON object (e.g. mapping), not
 
 For more information on JSON RPC, please see the [JSON RPC 2.0 specification](http://www.jsonrpc.org/specification).
 
-####REST
+#### REST
 
 For REST API all requests are made via GET where query-specific arguments are encoded as URL parameters. Moreover, the same requests can be passed via HTTP POST in order to encrypt the transaction parameters. There are only two methods supported: ``get`` and ``compose``. The URL formats are as follows, respectively:
 `/rest/<table_name>/get?<filters>&op=<operator>`
 `/rest/<message_type>/compose?<transaction arguments>`
 
-###Authentication
+### Authentication
 
 The API support HTTP basic authentication to use, which is enabled if and only
 if a password is set. **The default user is ``'rpc'``.**
 
 
-##Example Implementations for JSON RPC API
+## Example Implementations for JSON RPC API
 
 The following examples have authentication enabled and the `user` set to its
 default value of `'rpc'`. The password is not set (default: `'rpc'`). Ensure
@@ -83,7 +170,7 @@ file `'server.conf'`.
 
 Submissions of examples in additional languages are welcome!
 
-###Python
+### Python
 
     import json
     import requests
@@ -103,7 +190,7 @@ Submissions of examples in additional languages are welcome!
     print("Response: ", response.text)
 
 
-###PHP
+### PHP
 
 With PHP, you use the [JsonRPC](https://github.com/fguillot/JsonRPC)
 library.
@@ -123,21 +210,21 @@ library.
     var_dump($result2);
     ?>
 
-###curl
+### curl
 
 Remember to surround non-numeric parameter values with the double quotes, as per [JSON-RPC 2.0 examples](http://www.jsonrpc.org/specification#examples). For example, `"order_by": "tx_hash"` is correct and will work, `"order_by": 'tx_hash'` won't.
 
-####Linux
+#### Linux
 
     curl -X POST http://127.0.0.1:4005/api/ --user rpc:$PASSWORD -H 'Content-Type: application/json; charset=UTF-8' -H 'Accept: application/json, text/javascript' --data-binary '{ "jsonrpc": "2.0", "id": 0, "method": "get_running_info" }'
 
-####Windows
+#### Windows
 
 On Windows, depending on implementation the above curl command may need to be formatted differently due to problems that Windows has with escapes. For example this particular format was found to work with curl 7.50.1 (x86_64-w64-mingw32) on Windows 10 (x64).
 
     curl -X POST http://127.0.0.1:4005/api/ --user rpc:$PASSWORD -H "Content-Type: application/json; charset=UTF-8" -H "Accept: application/json, text/javascript" --data-binary "{ \"jsonrpc\": \"2.0\", \"id\": 0, \"method\": \"get_running_info\" }"
 
-###c# (RestSharp)
+### c# (RestSharp)
 
 Authorization string in the example below is based on the default username/password.
 
@@ -149,7 +236,7 @@ Authorization string in the example below is based on the default username/passw
     request.AddParameter("application/json", "{\r\n  \"method\": \"get_running_info\",\r\n  \"params\": {},\r\n  \"jsonrpc\": \"2.0\",\r\n  \"id\": 1\r\n}", ParameterType.RequestBody);
     IRestResponse response = client.Execute(request);
 
-###Go
+### Go
 
 Authorization string in the example below is based on the default username/password.
 
@@ -184,7 +271,7 @@ Authorization string in the example below is based on the default username/passw
 
     }
 
-###Ruby (Net::HTTP)
+### Ruby (Net::HTTP)
 
 Authorization string in the example below is based on the default username/password.
 
@@ -205,11 +292,11 @@ Authorization string in the example below is based on the default username/passw
     puts response.read_body
 
 
-##Example Implementations for REST API
+## Example Implementations for REST API
 
 The following examples don't use authentication as with default settings.
 
-###Python
+### Python
 
     import requests
 
@@ -222,21 +309,21 @@ The following examples don't use authentication as with default settings.
     print("Response: ", response.text)
 
 
-###curl
+### curl
 
 These examples use the default username/password combination in URL.
 
-####Linux
+#### Linux
 
     curl "http://rpc:rpc@127.0.0.1:4005/rest/sends/get?source=1B6ahDHnKtZ5GXqytHSxfcXgNoxm1q1RsP&destination=14fAoS9FPD9jx36hjCNoAqFVLNHD1NQVN5&op=AND" -H "Content-Type: application/json; charset=UTF-8" -H "Accept: application/json"
 
-####Windows
+#### Windows
 
 This example was created with curl 7.50.1 (x86_64-w64-mingw32) on Windows 10. For POST encryption add `'-X POST'`.
 
     curl "http://rpc:rpc@127.0.0.1:4005/rest/sends/get?source=1B6ahDHnKtZ5GXqytHSxfcXgNoxm1q1RsP&destination=14fAoS9FPD9jx36hjCNoAqFVLNHD1NQVN5&op=AND" -H "Content-Type: application/json; charset=UTF-8" -H "Accept: application/json"
 
-##Example Parameters
+## Example Parameters
 
 * Fetch all balances for all assets for both of two addresses, using keyword-based arguments
 
@@ -341,7 +428,7 @@ This example was created with curl 7.50.1 (x86_64-w64-mingw32) on Windows 10. Fo
                   }
 
 
-##Signing Transactions Before Broadcasting
+## Signing Transactions Before Broadcasting
 
 **Note:** Before v9.49.4, the dogeparty server API provided an interface to Dogecoin Core's signing functionality through the `do_*`, `sign_tx` and `broadcast_tx` methods, which have all since been removed.
 
@@ -440,9 +527,9 @@ async function signP2SHDataTX(wif, txHex) {
 }
 ```
 
-##Terms & Conventions
+## Terms & Conventions
 
-###assets
+### assets
 
 Everywhere in the API an asset is referenced by its name, not its ID. See the [Dogeparty protocol specification](https://github.com/DogepartyXDP/Documentation/blob/master/Developers/protocol_specification.md) for what constitutes a valid asset name.
 Examples:
@@ -452,7 +539,7 @@ Examples:
 - "FOOBAR"
 - "A7736697071037023001"
 
-###subassets
+### subassets
 
 See the [Dogeparty protocol specification](https://github.com/DogepartyXDP/Documentation/blob/master/Developers/protocol_specification.md#subassets) for what constitutes a valid subasset name.
 Examples:
@@ -460,7 +547,7 @@ Examples:
 - "PIZZA.X"
 - "PIZZA.REALLY-long-VALID-Subasset-NAME"
 
-###Quantities and balances
+### Quantities and balances
 
 Anywhere where an quantity is specified, it is specified in **satoshis** (if a divisible asset), or as whole numbers
 (if an indivisible asset). To convert satoshis to floating-point, simply cast to float and divide by 100,000,000.
@@ -472,11 +559,11 @@ Examples:
 
 **NOTE:** XDP and DOGE themselves are divisible assets.
 
-###floats
+### floats
 
 Floats are ratios or floating point values with six decimal places of precision, used in bets and dividends.
 
-###Memos
+### Memos
 
 See the [Dogeparty protocol specification](../protocol_specification/#memos) for what constitutes a valid memo.
 Examples:
@@ -485,9 +572,9 @@ Examples:
 - "1ca6"
 
 
-##Miscellaneous
+## Miscellaneous
 
-###Filtering Read API results
+### Filtering Read API results
 
 The Dogeparty API aims to be as simple and flexible as possible. To this end, it includes a straightforward
 way to filter the results of most [Read API](#read-api-function-reference) to get the data you want, and only that.
@@ -519,10 +606,10 @@ the specific comparison logic used, please see [this page](http://www.sqlite.org
 #Technical Specification
 
 
-##Read API Function Reference
+## Read API Function Reference
 
 
-###get_{table}
+### get_{table}
 
 **get_{table}(filters=[], filterop='AND', order_by=null, order_dir=null, start_block=null, end_block=null, status=null, limit=1000, offset=0, show_expired=true)**
 
@@ -580,7 +667,7 @@ For example: ``get_balances``, ``get_credits``, ``get_debits`` are all valid API
     for XDP and other Dogeparty assets. To get DOGE-based balances, use an existing system such as Dogecoin Core, blockchain.info, etc.
 
 
-###get_asset_info
+### get_asset_info
 
 **get_asset_info(asset)**
 
@@ -595,17 +682,17 @@ Gets information on an issued asset.
 
   ``null`` if the asset was not found. Otherwise, a list of one or more objects, each one with the following properties:
 
-  - **asset** (*string*): The [assets](#assets) of the asset itself
-  - **asset_longname** (*string*): The [subasset](#subassets) longname, if any
-  - **owner** (*string*): The address that currently owns the asset (i.e. has issuance rights to it)
-  - **divisible** (*boolean*): Whether the asset is divisible or not
-  - **locked** (*boolean*): Whether the asset is locked (future issuances prohibited)
-  - **total_issued** (*integer*): The [quantities](#quantities-and-balances) of the asset issued, in total
-  - **description** (*string*): The asset's current description
-  - **issuer** (*string*): The asset's original owner (i.e. issuer)
+- **asset** (*string*): The [assets](#assets) of the asset itself
+- **asset_longname** (*string*): The [subasset](#subassets) longname, if any
+- **owner** (*string*): The address that currently owns the asset (i.e. has issuance rights to it)
+- **divisible** (*boolean*): Whether the asset is divisible or not
+- **locked** (*boolean*): Whether the asset is locked (future issuances prohibited)
+- **total_issued** (*integer*): The [quantities](#quantities-and-balances) of the asset issued, in total
+- **description** (*string*): The asset's current description
+- **issuer** (*string*): The asset's original owner (i.e. issuer)
 
 
-###get_supply
+### get_supply
 
 **get_supply(asset)**
 
@@ -618,7 +705,7 @@ Gets information on an issued asset.
   ``null`` if the asset was not found. Otherwise, a list of one or more objects, each one with the following properties:
 
 
-###get_asset_names
+### get_asset_names
 
 **get_asset_names()**
 
@@ -631,7 +718,7 @@ Gets information on an issued asset.
   A list of the names of all existing Dogeparty assets, ordered alphabetically.
 
 
-###get_holder_count
+### get_holder_count
 
 **get_holder_count()**
 
@@ -644,7 +731,7 @@ Gets information on an issued asset.
   An object the asset name as the property name, and the holder count as the value of that property name.
 
 
-###get_holders
+### get_holders
 
 **get_holders()**
 
@@ -657,7 +744,7 @@ Gets information on an issued asset.
   A list of addresses that hold some quantity of the specified asset.
 
 
-###get_messages
+### get_messages
 
 **get_messages(block_index)**
 
@@ -673,7 +760,7 @@ database actions and allows for lower-level state tracking for applications that
   A list of one or more [message object](#message-object) if there was any activity in the block, otherwise ``[]`` (empty list).
 
 
-###get_messages_by_index
+### get_messages_by_index
 
 **get_messages_by_index(message_indexes)**
 
@@ -688,7 +775,7 @@ Return the message feed messages whose ``message_index`` values are contained in
   A list containing a `message <#message-object>`_ for each message found in the specified ``message_indexes`` list. If none were found, ``[]`` (empty list) is returned.
 
 
-###get_block_info
+### get_block_info
 
 **get_block_info(block_index)**
 
@@ -702,12 +789,12 @@ Gets basic information for a specific block.
 
   If the block was found, an object with the following properties:
 
-  - **block_index** (*integer*): The block index (i.e. block height). Should match what was specified for the *block_index* input parameter).
-  - **block_hash** (*string*): The block hash identifier
-  - **block_time** (*integer*): A UNIX timestamp of when the block was processed by the network
+- **block_index** (*integer*): The block index (i.e. block height). Should match what was specified for the *block_index* input parameter).
+- **block_hash** (*string*): The block hash identifier
+- **block_time** (*integer*): A UNIX timestamp of when the block was processed by the network
 
 
-###get_blocks
+### get_blocks
 
 **get_blocks(block_indexes, min_message_index=null)**
 
@@ -724,13 +811,13 @@ is much quicker than using multiple ``get_block_info()`` and ``get_messages()`` 
   A list of objects, one object for each valid block index specified, in order from first block index to last.
   Each object has the following properties:
 
-  - **block_index** (*integer*): The block index (i.e. block height). Should match what was specified for the *block_index* input parameter).
-  - **block_hash** (*string*): The block hash identifier
-  - **block_time** (*integer*): A UNIX timestamp of when the block was processed by the network
-  - **_messages** (*list*): A list of one or more [message object](#message-object) if there was any activity in the block, otherwise ``[]`` (empty list).
+- **block_index** (*integer*): The block index (i.e. block height). Should match what was specified for the *block_index* input parameter).
+- **block_hash** (*string*): The block hash identifier
+- **block_time** (*integer*): A UNIX timestamp of when the block was processed by the network
+- **_messages** (*list*): A list of one or more [message object](#message-object) if there was any activity in the block, otherwise ``[]`` (empty list).
 
 
-###get_running_info
+### get_running_info
 
 **get_running_info()**
 
@@ -744,19 +831,19 @@ Gets some operational parameters for the server.
 
   An object with the following properties:
 
-  - **db_caught_up** (*boolean*): ``true`` if block processing is caught up with the Dogecoin blockchain, ``false`` otherwise.
-  - **dogecoin_block_count** (**integer**): The block height on the Dogecoin network (may not necessarily be the same as ``last_block``, if the server is catching up)
-  - **last_block** (*integer*): The index (height) of the last block processed by the server
-  - **last_message_index** (*integer*): The index (ID) of the last message in the message feed
-  - **running_testnet** (*boolean*): ``true`` if the server is configured for testnet, ``false`` if configured on mainnet.
-  - **running_testcoin** (*boolean*): ``true`` if the server is configured for testcoin use, ``false`` if not (default).
-  - **version_major** (*integer*): The major version of dogeparty-server running
-  - **version_minor** (*integer*): The minor version of dogeparty-server running
-  - **version_revision** (*integer*): The revision version of dogeparty-server running
-  - **api_limit_rows** (*integer*): The max amount of rows any call will return. If ``0`` there's no limit to calls. Defaults to ``1000``.
+- **db_caught_up** (*boolean*): ``true`` if block processing is caught up with the Dogecoin blockchain, ``false`` otherwise.
+- **dogecoin_block_count** (**integer**): The block height on the Dogecoin network (may not necessarily be the same as ``last_block``, if the server is catching up)
+- **last_block** (*integer*): The index (height) of the last block processed by the server
+- **last_message_index** (*integer*): The index (ID) of the last message in the message feed
+- **running_testnet** (*boolean*): ``true`` if the server is configured for testnet, ``false`` if configured on mainnet.
+- **running_testcoin** (*boolean*): ``true`` if the server is configured for testcoin use, ``false`` if not (default).
+- **version_major** (*integer*): The major version of dogeparty-server running
+- **version_minor** (*integer*): The minor version of dogeparty-server running
+- **version_revision** (*integer*): The revision version of dogeparty-server running
+- **api_limit_rows** (*integer*): The max amount of rows any call will return. If ``0`` there's no limit to calls. Defaults to ``1000``.
 
 
-###get_element_counts
+### get_element_counts
 
 **get_element_counts()**
 
@@ -771,7 +858,7 @@ Gets the number of records for each entity type
   An object with a property for each element type (e.g. `transactions`, `blocks`, `bets`, `order_matches`, etc.) with the value of each property being the record count of that respective entity in the database.
 
 
-###get_unspent_txouts
+### get_unspent_txouts
 
 **get_unspent_txouts(address, unconfirmed=false, unspent_tx_hash=null)**
 
@@ -788,14 +875,14 @@ Get a listing of UTXOs for the specified address.
 
   A list of objects, with each entry in the dict having the following properties:
 
-    - **amount**: The amount of the UTXO (e.g. 0.12345678)
-    - **value**: The value of the UTXO in satoshis (e.g. 12345678)
-    - **height**: The block height of the UTXO
-    - **confirmations**: Number of confirmations since the UTXO was created
-    - **txid**: The txid (hash) that the UTXO was included in
-    - **vout**: The vout number in the specified txid for the UTXO
+  - **amount**: The amount of the UTXO (e.g. 0.12345678)
+  - **value**: The value of the UTXO in satoshis (e.g. 12345678)
+  - **height**: The block height of the UTXO
+  - **confirmations**: Number of confirmations since the UTXO was created
+  - **txid**: The txid (hash) that the UTXO was included in
+  - **vout**: The vout number in the specified txid for the UTXO
 
-###getrawtransaction
+### getrawtransaction
 
 **getrawtransaction(tx_hash, verbose=false, skip_missing=false)**
 
@@ -812,7 +899,7 @@ Gets raw data for a single transaction.
   If found, a raw transaction objects having the same format as the [dogecoind getrawtransaction API call](https://chainquery.com/dogecoin-api/getrawtransaction). If not found, `null`.
 
 
-###getrawtransaction_batch
+### getrawtransaction_batch
 
 **getrawtransaction_batch(txhash_list, verbose=false, skip_missing=false)**
 
@@ -829,7 +916,7 @@ Gets raw data for a list of transactions.
   A list of raw transaction objects having the same format as the [dogecoind getrawtransaction API call](https://chainquery.com/dogecoin-api/getrawtransaction).
 
 
-###search_raw_transactions
+### search_raw_transactions
 
 **search_raw_transactions(address, unconfirmed=true)**
 
@@ -845,7 +932,7 @@ Gets raw transaction objects for the specified address.
   A list of raw transaction objects, with each object having the same format as the [dogecoind getrawtransaction API call](https://chainquery.com/dogecoin-api/getrawtransaction).
 
 
-###get_tx_info
+### get_tx_info
 
 **get_tx_info(tx_hex, block_index=null)**
 
@@ -860,14 +947,14 @@ Get transaction info, as parsed by `dogeparty-server`.
 
   A list with the following items (in order as listed below):
 
-    - `source`
-    - `destination`
-    - `doge_amount`
-    - `fee`
-    - `data`: The embedded raw protocol data, in hexadecimal-serialized format
+  - `source`
+  - `destination`
+  - `doge_amount`
+  - `fee`
+  - `data`: The embedded raw protocol data, in hexadecimal-serialized format
 
 
-###search_pubkey
+### search_pubkey
 
 **search_pubkey(pubkeyhash, provided_pubkeys=null)**
 
@@ -883,7 +970,7 @@ For the specified pubkeyhash (i.e. address), return the public key. Note that th
   A string with the specified pubkey. If the pubkey cannot be found, an exception will be generated and returned.
 
 
-###unpack
+### unpack
 
 **unpack(data_hex)**
 
@@ -895,13 +982,13 @@ Parse the data_hex of a message into its parameters. Currently only works with `
 
 **Return:**
 
-  - **message_type_id** (*int*): the ID of the message type.  Legacy sends are `0` and enhanced sends are `2`.
-  - **unpacked** (*object*): A map of message parameters. For legacy sends this object includes `asset` and `quantity`.  For enhanced sends, this object includes `address`, `asset`, `quantity` and `memo`.  For legacy sends, the source and destination are found using `get_tx_info`.  For enhanced sends, the destination address is in the message parameters and the source may be found using `get_tx_info`.
+- **message_type_id** (*int*): the ID of the message type.  Legacy sends are `0` and enhanced sends are `2`.
+- **unpacked** (*object*): A map of message parameters. For legacy sends this object includes `asset` and `quantity`.  For enhanced sends, this object includes `address`, `asset`, `quantity` and `memo`.  For legacy sends, the source and destination are found using `get_tx_info`.  For enhanced sends, the destination address is in the message parameters and the source may be found using `get_tx_info`.
 
 
-##Action/Write API Function Reference
+## Action/Write API Function Reference
 
-###create_bet
+### create_bet
 
 **create_bet(source, feed_address, bet_type, deadline, wager_quantity, counterwager_quantity, expiration, target_value=0.0, leverage=5040)**
 
@@ -925,7 +1012,7 @@ Issue a bet against a feed.
   The unsigned transaction, as an hex-encoded string. Must be signed before being broadcast: see [here](#signing-transactions-before-broadcasting) for more information.
 
 
-###create_broadcast
+### create_broadcast
 
 **create_broadcast(source, fee_fraction, text, timestamp, value)**
 
@@ -945,7 +1032,7 @@ Broadcast textual and numerical information to the network.
   The unsigned transaction, as an hex-encoded string. Must be signed before being broadcast: see [here](#signing-transactions-before-broadcasting) for more information.
 
 
-###create_dogepay
+### create_dogepay
 
 **create_dogepay(order_match_id)**
 
@@ -961,7 +1048,7 @@ Create and (optionally) broadcast a DOGEpay message, to settle an Order Match fo
   The unsigned transaction, as an hex-encoded string. Must be signed before being broadcast: see [here](#signing-transactions-before-broadcasting) for more information.
 
 
-###create_burn
+### create_burn
 
 **create_burn(source, quantity)**
 
@@ -978,7 +1065,7 @@ Burn a given quantity of DOGE for XDP (**on mainnet, possible between blocks 278
   The unsigned transaction, as an hex-encoded string. Must be signed before being broadcast: see [here](#signing-transactions-before-broadcasting) for more information.
 
 
-###create_cancel
+### create_cancel
 
 **create_cancel(offer_hash, source)**
 
@@ -994,7 +1081,7 @@ Cancel an open order or bet you created.
 
   The unsigned transaction, as an hex-encoded string. Must be signed before being broadcast: see [here](#signing-transactions-before-broadcasting) for more information.
 
-###create_destroy
+### create_destroy
 
 **create_destroy(source, asset, quantity, tag)**
 
@@ -1012,7 +1099,7 @@ Destroy XDP or a user defined asset.
 
   The unsigned transaction, as an hex-encoded string. Must be signed before being broadcast: see [here](#signing-transactions-before-broadcasting) for more information.
 
-###create_dispenser
+### create_dispenser
 
 **create_dispenser(source, asset, give_quantity, escrow_quantity, mainchainrate, status, open_address)**
 
@@ -1035,7 +1122,7 @@ of give_quantity to ease dispenser operation.
 
   The unsigned transaction, as an hex-encoded string. Must be signed before being broadcast: see [here](#signing-transactions-before-broadcasting) for more information.
 
-###create_dividend
+### create_dividend
 
 **create_dividend(source, quantity_per_unit, asset, dividend_asset)**
 
@@ -1054,7 +1141,7 @@ Issue a dividend on a specific user defined asset.
   The unsigned transaction, as an hex-encoded string. Must be signed before being broadcast: see [here](#signing-transactions-before-broadcasting) for more information.
 
 
-###create_issuance
+### create_issuance
 
 **create_issuance(source, asset, quantity, divisible, description, transfer_destination=null)**
 
@@ -1083,7 +1170,7 @@ Issue a new asset, issue more of an existing asset, lock an asset, or transfer t
 
 
 
-###create_order
+### create_order
 
 **create_order(source, give_asset, give_quantity, get_asset, get_quantity, expiration)**
 
@@ -1104,7 +1191,7 @@ Issue an order request.
 
   The unsigned transaction, as an hex-encoded string. Must be signed before being broadcast: see [here](#signing-transactions-before-broadcasting) for more information.
 
-###create_send
+### create_send
 
 
 **create_send(source, destination, asset, quantity)**
@@ -1130,7 +1217,7 @@ To send multiple assets/destinations simultaneously you can pass an array of par
   The unsigned transaction, as an hex-encoded string. Must be signed before being broadcast: see [here](#signing-transactions-before-broadcasting) for more information.
 
 
-###create_sweep
+### create_sweep
 
 **create_sweep(source, destination, flags, memo)**
 
@@ -1152,7 +1239,7 @@ Sends all assets and/or transfer ownerships to a destination address.
   The unsigned transaction, as an hex-encoded string. Must be signed before being broadcast: see [here](#signing-transactions-before-broadcasting) for more information.
 
 
-###Advanced `create_` parameters
+### Advanced `create_` parameters
 
 Each `create_` call detailed below can take the following common keyword parameters:
 
@@ -1174,32 +1261,32 @@ Each `create_` call detailed below can take the following common keyword paramet
 
 **With the exception of `pubkey` and `allow_unconfirmed_inputs`, these values should be left at their defaults, unless you know what you are doing.**
 
-####Transaction Encodings
+#### Transaction Encodings
 
 By default the default value of the ``encoding`` parameter detailed above is ``auto``, which means that `dogeparty-server` automatically determines the best way to encode the Dogeparty protocol data into a new transaction. If you know what you are doing and would like to explicitly specify an encoding:
 
 - To return the transaction as an **OP_RETURN** transaction, specify ``opreturn`` for the ``encoding`` parameter.
-   - **OP_RETURN** transactions cannot have more than 80 bytes of data. If you force OP_RETURN encoding and your transaction would have more than this amount, an exception will be generated.
+ - **OP_RETURN** transactions cannot have more than 80 bytes of data. If you force OP_RETURN encoding and your transaction would have more than this amount, an exception will be generated.
 - To return the transaction as a **multisig** transaction, specify ``multisig`` for the ``encoding`` parameter.
-    - ``pubkey`` should be set to the hex-encoded public key of the source address.
-    - Note that with the newest versions of Dogecoin (0.12.1 onward), bare multisig encoding does not reliably propagate. More information on this is documented [here](https://github.com/rubensayshi/dogeparty-lib/pull/9).
+  - ``pubkey`` should be set to the hex-encoded public key of the source address.
+  - Note that with the newest versions of Dogecoin (0.12.1 onward), bare multisig encoding does not reliably propagate. More information on this is documented [here](https://github.com/rubensayshi/dogeparty-lib/pull/9).
 - To return the transaction as a **pubkeyhash** transaction, specify ``pubkeyhash`` for the ``encoding`` parameter.
-    - ``pubkey`` should be set to the hex-encoded public key of the source address.
+  - ``pubkey`` should be set to the hex-encoded public key of the source address.
 - To return the transaction as a 2 part **P2SH** transaction, specify ``P2SH`` for the encoding parameter.
-    - First call the ``create_`` method with the ``encoding`` set to ``P2SH``.
-    - Sign the transaction as usual and broadcast it. It's recommended but not required to wait the transaction to confirm as malleability is an issue here (P2SH isn't yet supported on segwit addresses).
-    - The resulting ``txid`` must be passed again on an identic call to the ``create_`` method, but now passing an additional parameter ``p2sh_pretx_txid`` with the value of the previous transaction's id.
-    - The resulting transaction is a ``P2SH`` encoded message, using the redeem script on the transaction inputs as data carrying mechanism.
-    - Sign the transaction following the ``Dogecoinjs-lib on javascript, signing a P2SH redeeming transaction`` section
-    - **NOTE**: Don't leave pretxs hanging without transmitting the second transaction as this pollutes the UTXO set and risks making dogecoin harder to run on low spec nodes.
+  - First call the ``create_`` method with the ``encoding`` set to ``P2SH``.
+  - Sign the transaction as usual and broadcast it. It's recommended but not required to wait the transaction to confirm as malleability is an issue here (P2SH isn't yet supported on segwit addresses).
+  - The resulting ``txid`` must be passed again on an identic call to the ``create_`` method, but now passing an additional parameter ``p2sh_pretx_txid`` with the value of the previous transaction's id.
+  - The resulting transaction is a ``P2SH`` encoded message, using the redeem script on the transaction inputs as data carrying mechanism.
+  - Sign the transaction following the ``Dogecoinjs-lib on javascript, signing a P2SH redeeming transaction`` section
+  - **NOTE**: Don't leave pretxs hanging without transmitting the second transaction as this pollutes the UTXO set and risks making dogecoin harder to run on low spec nodes.
 
 
 
-##REST API Function Reference
+## REST API Function Reference
 
 The REST API documentation is hosted both on our webiste and on a new API documentation platform called apiary.io. This experimental documentation, complementary to the one in this document, is located [here](http://docs.dogepartylib.apiary.io/#).
 
-###get
+### get
 
 **get(table_name, filters, filterop)**
 
@@ -1230,7 +1317,7 @@ Example query:
   Desired database rows from table_name sieved using filters.
 
 
-###compose
+### compose
 
 **compose(message_type, transaction_params)**
 
@@ -1258,12 +1345,12 @@ Example query:
   The hex data of composed transaction.
 
 
-##Objects
+## Objects
 
 The API calls documented can return any one of these objects.
 
 
-###Balance Object
+### Balance Object
 
 An object that describes a balance that is associated to a specific address:
 
@@ -1272,7 +1359,7 @@ An object that describes a balance that is associated to a specific address:
 * **quantity** (*integer*): The [quantities](#quantities-and-balances) of the specified asset at this address
 
 
-###Bet Object
+### Bet Object
 
 An object that describes a specific bet:
 
@@ -1294,7 +1381,7 @@ An object that describes a specific bet:
 * **validity** (*string*): Set to "valid" if a valid bet. Any other setting signifies an invalid/improper bet
 
 
-###Bet Match Object
+### Bet Match Object
 
 An object that describes a specific occurance of two bets being matched (either partially, or fully):
 
@@ -1321,7 +1408,7 @@ An object that describes a specific occurance of two bets being matched (either 
 * **validity** (*string*): Set to "valid" if a valid order match. Any other setting signifies an invalid/improper order match
 
 
-###Broadcast Object
+### Broadcast Object
 
 An object that describes a specific occurance of a broadcast event (i.e. creating/extending a feed):
 
@@ -1336,7 +1423,7 @@ An object that describes a specific occurance of a broadcast event (i.e. creatin
 * **validity** (*string*): Set to "valid" if a valid broadcast. Any other setting signifies an invalid/improper broadcast
 
 
-###DOGEPay Object
+### DOGEPay Object
 
 An object that matches a request to settle an Order Match for which DOGE is owed:
 
@@ -1348,7 +1435,7 @@ An object that matches a request to settle an Order Match for which DOGE is owed
 * **validity** (*string*): Set to "valid" if valid
 
 
-###Burn Object
+### Burn Object
 
 An object that describes an instance of a specific burn:
 
@@ -1361,7 +1448,7 @@ An object that describes an instance of a specific burn:
 * **validity** (*string*): Set to "valid" if a valid burn. Any other setting signifies an invalid/improper burn
 
 
-###Cancel Object
+### Cancel Object
 
 An object that describes a cancellation of a (previously) open order or bet:
 
@@ -1373,7 +1460,7 @@ An object that describes a cancellation of a (previously) open order or bet:
 * **validity** (*string*): Set to "valid" if a valid burn. Any other setting signifies an invalid/improper burn
 
 
-###Debit/Credit Object
+### Debit/Credit Object
 
 An object that describes a account debit or credit:
 
@@ -1385,7 +1472,7 @@ An object that describes a account debit or credit:
 * **quantity** (*integer*): The [quantities](#quantities-and-balances) of the specified asset debited or credited
 
 
-###Dividend Object
+### Dividend Object
 
 An object that describes an issuance of dividends on a specific user defined asset:
 
@@ -1398,7 +1485,7 @@ An object that describes an issuance of dividends on a specific user defined ass
 * **validity** (*string*): Set to "valid" if a valid burn. Any other setting signifies an invalid/improper burn
 
 
-###Issuance Object
+### Issuance Object
 
 An object that describes a specific occurance of a user defined asset being issued, or re-issued:
 
@@ -1414,7 +1501,7 @@ An object that describes a specific occurance of a user defined asset being issu
 * **validity** (*string*): Set to "valid" if a valid issuance. Any other setting signifies an invalid/improper issuance
 
 
-###Order Object
+### Order Object
 
 An object that describes a specific order:
 
@@ -1434,7 +1521,7 @@ An object that describes a specific order:
 * **fee_required** (*integer*): The miners' fee required to be paid by orders for them to match this one; in DOGE; required only if buying DOGE (may be zero, though)
 
 
-###Order Match Object
+### Order Match Object
 
 An object that describes a specific occurance of two orders being matched (either partially, or fully):
 
@@ -1455,7 +1542,7 @@ An object that describes a specific occurance of two orders being matched (eithe
 * **validity** (*string*): Set to "valid" if a valid order match. Any other setting signifies an invalid/improper order match
 
 
-###Send Object
+### Send Object
 
 An object that describes a specific send (e.g. "simple send", of XDP, or a user defined asset):
 
@@ -1470,7 +1557,7 @@ An object that describes a specific send (e.g. "simple send", of XDP, or a user 
 * **memo** (*string*): The [memo](../protocol_specification#memos) associated with this transaction
 
 
-###Message Object
+### Message Object
 
 An object that describes a specific event in the dogepartyd message feed (which can be used by 3rd party applications
 to track state changes to the dogepartyd database on a block-by-block basis).
@@ -1484,7 +1571,7 @@ to track state changes to the dogepartyd database on a block-by-block basis).
   columns in the table referred to by **category**.
 
 
-###Bet Expiration Object
+### Bet Expiration Object
 
 An object that describes the expiration of a bet created by the source address.
 
@@ -1494,7 +1581,7 @@ An object that describes the expiration of a bet created by the source address.
 * **source** (*string*): The source address that created the bet
 
 
-###Order Expiration Object
+### Order Expiration Object
 
 An object that describes the expiration of an order created by the source address.
 
@@ -1504,7 +1591,7 @@ An object that describes the expiration of an order created by the source addres
 * **source** (*string*): The source address that created the order
 
 
-###Bet Match Expiration Object
+### Bet Match Expiration Object
 
 An object that describes the expiration of a bet match.
 
@@ -1514,7 +1601,7 @@ An object that describes the expiration of a bet match.
 * **block_index** (*integer*): The block index (block number in the block chain) when this expiration occurred
 
 
-###Order Match Expiration Object
+### Order Match Expiration Object
 
 An object that describes the expiration of an order match.
 
@@ -1524,7 +1611,7 @@ An object that describes the expiration of an order match.
 * **block_index** (*integer*): The block index (block number in the block chain) when this expiration occurred
 
 
-##Status
+## Status
 
 Here the list of all possible status for each table:
 
@@ -1558,5 +1645,5 @@ There will be no incompatible API pushes that do not either have:
 * A well known set cut over date in the future
 * Or, a deprecation process where the old API is supported for an amount of time
 
-##9.58.3
+## 9.58.3
  * Initial dogeparty release

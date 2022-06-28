@@ -4,6 +4,12 @@ Counterparty and Counterwallet support a basic form of multisig. Here’s an exa
 
 In this example, we’ll use a **2-of-3** multisig. With our multisig support, you may send and receive Bitcoin or any Counterparty asset (including XCP) in Counterwallet.
 
+## TOC
+
+- [Creating a 2-of-3 multisig address:](#creating-a-2-of-3-multisig-address)
+- [To Receive BTC or a Counterparty asset to the multisig address:](#to-receive-btc-or-a-counterparty-asset-to-the-multisig-address)
+- [To Send BTC or a Counterparty asset from the multisig address:](#to-send-btc-or-a-counterparty-asset-from-the-multisig-address)
+
 ## Creating a 2-of-3 multisig address:
 * Create 3 separate Counterwallet accounts. (Each one will normally be owned by a separate person, although this is not a requirement.)
 * Each new wallet will have 1 Bitcoin/Counterparty address by default. That will be utilized for the multisig

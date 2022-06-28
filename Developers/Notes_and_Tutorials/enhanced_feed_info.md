@@ -1,9 +1,17 @@
-#Enhanced Feed Info
+# Enhanced Feed Info
+
+- [Feed URL format](#feed-url-format)
+- [Feed JSON format](#feed-json-format)
+  - ['targets' Object format:](#targets-object-format)
+  - ['operator' fields:](#operator-fields)
+- [Examples](#examples)
+- [Other Topics](#other-topics)
+  - [Validity and refreshing](#validity-and-refreshing)
+  - [Validating your JSON data](#validating-your-json-data)
 
 Feed providers can initialize a feed via a broadcast where the broadcast text field contains a URL to a specially formatted .json file (e.g. http://www.mydomain.com/foo.json). This allows the feed operator to provide enhanced information to their users.
 
-
-##Feed URL format
+## Feed URL format
 
 The URL itself in the broadcast text field must conform to the following:
 * Must fully fit within the text field space allowed
@@ -12,7 +20,7 @@ The URL itself in the broadcast text field must conform to the following:
 * It is recommended that the server return the JSON data with the correct MIME type set (e.g. "application/json")
 * A HTTP 200 response code must be returned (redirects, e.g. 301, 302, etc. are not allowed)
 
-##Feed JSON format
+## Feed JSON format
 
 The JSON object/mapping data the URL points to must contain the following data:
 
@@ -38,8 +46,9 @@ The JSON object/mapping data the URL points to must contain the following data:
 <tr><td><b>odds.suggested</b></td><td>Required (or odds.initial)</td><td>Default odds used when there is open bets. </td></tr>
 </table>
 
-<br/>
-<b>'targets' Object format:</b>
+
+### 'targets' Object format:
+
 <table>
 <tr><td><b>text</b></td><td>Required</td><td>Topic of the target_value. 64 characters max.</td></tr>
 <tr><td><b>value</b></td><td>Required</td><td>The value used for this target_value.</td></tr>
@@ -53,8 +62,9 @@ The JSON object/mapping data the URL points to must contain the following data:
 <tr><td><b>odds.suggested</b></td><td>Required (or odds.initial)</td><td>Default odds used when there is open bets. </td></tr>
 </table>
 
-<br/>
-<b>'operator' fields:</b>
+
+### 'operator' fields:
+
 <table>
 <tr><td><b>name</b></td><td>Required</td><td>The operator name.</td></tr>
 <tr><td><b>description</b></td><td>Optional</td><td>A longish description about the operator. 2048 characters max.</td></tr>
@@ -128,12 +138,12 @@ Here's an example for a binary feed called <b>Superbowl 2014</b>:
 
 ## Other Topics
 
-###Validity and refreshing
+### Validity and refreshing
 In order for this data file to be deemed as valid against the specified address, there must have been a broadcast at that address, and the text field of that broadcast must have been set to the URL of this JSON file and the value field set to -1 (negative 1). From this feed broadcast, Counterwallet system will pull the fee-fraction, to use as the fee for the given feed, and will query this URL provided to validate and fetch the necessary information. 
 
 If the information you provided is reachable and valid (within a 5 second response time), the feed's information will be enhanced based on this data. If it is not, counterblockd will retry up to 2 additional times, over the next 30 or so minutes, and then give up until rebroadcast is made with a JSON URL and value=-1 (the URL may be the same).
 
-###Validating your JSON data
+### Validating your JSON data
 
 Your JSON data must respect and validate against [this](https://github.com/DogepartyXDP/dogeblock/blob/master/dogeblock/schemas/feed.schema.json) JSON schema. If the validation fails on any level, counterblockd will not accept the data.
 

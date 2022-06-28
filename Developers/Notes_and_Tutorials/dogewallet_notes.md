@@ -1,15 +1,23 @@
-# More on multiple Dogewallet servers
+# Dogewallet Notes
+
+- [More on multiple Dogewallet servers](#more-on-multiple-dogewallet-servers)
+- [Dogewallet MultiAPI specifics](#dogewallet-multiapi-specifics)
+  - [multiAPIFailover for Read API (``get_``) Operations](#multiapifailover-for-read-api-get_-operations)
+  - [multiAPIConsensus for Action/Write (``create_``) Operations](#multiapiconsensus-for-actionwrite-create_-operations)
+  - [multiAPINewest for Redundant storage](#multiapinewest-for-redundant-storage)
+
+## More on multiple Dogewallet servers
 
 For the time being, the Dogeparty team itself operates the primary Dogewallet platform at `wallet.dogeparty.net`. However, as Dogewallet is open source software, it is possible to host your own site with Dogewallet site (for your personal use, or as an offering to others), or to even host your own Dogewallet servers to use with your own Dogeparty wallet implementation. The Dogeparty team supports and encourages this kind of activity (as long as the servers are secure), as it aids with increasing decentralization.
         
 Also note that due to the nature of Dogewallet being a deterministic wallet, users using one Dogewallet platform (i.e. the official one, for instance) have the flexibility to start using a different Dogewallet platform instead at any time, and as funds (i.e. private keys) are not stored on the server in any fashion, they will be able to see their funds on either. (Note that the only thing that will not migrate are saved preferences, such as address aliases, the theme setting, etc.)
 
-# Dogewallet MultiAPI specifics
+## Dogewallet MultiAPI specifics
 
 Dogewallet utilizes a sort of a "poor man's load balancing/failover" implementation called multiAPI (and implemented
 [here](https://github.com/DogepartyXDP/dogewallet/blob/master/src/js/util.api.js)). multiAPI can operate in a number of fashions.
 
-**multiAPIFailover for Read API (``get_``) Operations**
+### multiAPIFailover for Read API (``get_``) Operations
 
 *multiAPIFailover* functionality is currently used for all read API operations. In this model, the first Federated Node
 on the shuffled list is called for the data, and if it returns an error or the request times out, the second one on the
@@ -20,7 +28,7 @@ shuffled list, some clients may end up consulting it. However, as this functiona
 the worse case result is that a Dogewallet client is shown incorrect/modified data which leads to misinformed actions
 on the user's behalf. Moreover, the option always exists to move all read-queries to use multiAPIConsensus in the future should the need arise.
 
-**multiAPIConsensus for Action/Write (``create_``) Operations**
+### multiAPIConsensus for Action/Write (``create_``) Operations
 
 Based on this multiAPI capability, the wallet itself consults more than one of these Federated Nodes via consensus especially
 for all ``create_``-type operations. For example, if you send XDP, `dogeparty-server` on each server is still composing and sending
@@ -41,7 +49,7 @@ protection against potential attacks.
 multiAPIConsensus actually helps discover any potential "hacked" servers as well, since a returned consensus set with
 a divergent result will be rejected by the client, and thus trigger an examination of the root cause by the team.
 
-**multiAPINewest for Redundant storage**
+### multiAPINewest for Redundant storage
 
 In the same way, these multiple servers are used to provide redundant storage of client-side preferences, to ensure we
 have no single point of failure. In the case of the stored preferences for instance, when retrieved on login, the data from all servers

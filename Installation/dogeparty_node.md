@@ -1,5 +1,22 @@
 # Setting up a Dogeparty Node
 
+- [Introduction](#introduction)
+  - [Node Services](#node-services)
+  - [Hardware / OS requirements](#hardware--os-requirements)
+- [Pre-installation](#pre-installation)
+  - [Windows](#windows)
+  - [OS X](#os-x)
+  - [Linux](#linux)
+- [Installation](#installation)
+- [Post-installation tasks](#post-installation-tasks)
+- [Administration](#administration)
+- [Updating, rebuilding, uninstalling](#updating-rebuilding-uninstalling)
+- [Component development](#component-development)
+- [Counterwallet-Specific](#counterwallet-specific)
+  - [Getting a SSL Certificate](#getting-a-ssl-certificate)
+  - [Monitoring the Server](#monitoring-the-server)
+  - [Creating a configuration file](#creating-a-configuration-file)
+
 ## Introduction
 
 This document describes how one can set up their own Dogeparty "Doge Node" system, on Linux, Windows or OS X.
@@ -9,7 +26,7 @@ A Doge Node is a self-contained system that runs the some or all of the Dogepart
 The document is primarily intended for power users and developers.
  
 ### Node Services
-<a name="services"></a>
+
 Services run on a Federated Node include some or all of the following:
 
 * **dogeparty-server**: `dogeparty-lib` + `dogeparty-cli`. Implements support for the core Dogeparty protocol, via a provided REST API and command line interface.
@@ -23,17 +40,16 @@ Services run on a Federated Node include some or all of the following:
 Please note that Federated Node should not be installed on a system which already has one or more of conflicting services running on the ports used by Federated Node. The Federated Node install script checks that required ports are unused and exits to avoid conflict. If you have a non-essential Web, mongodb or other service running on the target system you can disable them or bind them to a different port to be able to pass the built-in check and avoid application conflicts.
 
 ### Hardware / OS requirements
-<a name="requirements"></a>
 
 - **Memory**: 4GB RAM (`dogecoind`, `dogeparty-server` only), 8GB+ RAM (full stack)
 - **Disk space:** The exact disk space required will be dependent on what services are run on the node:
-    - For ``dogecoin`` databases: **~361GB** (mainnet), **~32GB** (testnet)
-    - For ``addrindexrs`` database: **~63GB** (mainnet), **~6GB** (testnet)
-    - For ``dogeparty`` databases: **~5GB** (mainnet), **~1GB** (testnet)
+  - For ``dogecoin`` databases: **~361GB** (mainnet), **~32GB** (testnet)
+  - For ``addrindexrs`` database: **~63GB** (mainnet), **~6GB** (testnet)
+  - For ``dogeparty`` databases: **~5GB** (mainnet), **~1GB** (testnet)
 - **OS:** *Please note that Ubuntu Linux is the recommended OS at this time, as most of our testing is performed on it. Windows and OS X support is considered in BETA.*
-    - **Linux**: We recommend Ubuntu 20.10 64-bit, but other, modern versions of Linux should work, as long as they support the newest released version of Docker
-    - **Windows**: Windows 7 or higher, or Server 2008 or higher. 64-bit required
-    - **OS X**: 10.8 "Mountain Lion" or higher
+  - **Linux**: We recommend Ubuntu 20.10 64-bit, but other, modern versions of Linux should work, as long as they support the newest released version of Docker
+  - **Windows**: Windows 7 or higher, or Server 2008 or higher. 64-bit required
+  - **OS X**: 10.8 "Mountain Lion" or higher
 
 ## Pre-installation
 
@@ -51,7 +67,6 @@ Please note that Federated Node should not be installed on a system which alread
 * Next, you will need to enable access to your host hard drive so that some of the shared volumes work properly. To do this, right click on the Docker Whale icon in your system tray. Then go to "Docker Settings" and then "Shared Drives". Turn on access to the drive on which the `dogenode` folder will reside (most likely your "C" drive).
 * Finally, launch [a command prompt as Administrator](https://technet.microsoft.com/en-us/library/cc947813(v=ws.10).aspx)
 
-<a name="docker-toolbox-note"></a> **If using Docker Toolbox**:
 
 * After installation completes, launch the "Docker Quickstart Terminal" and let it configure itself.
 * Once this finishes, you will need to resize the Virtual Machine that Docker Toolbox uses to run the Docker containers. Note that it currently limits this VM to 1GB of memory and  20GB hard disk space total by default (shared across _all_ containers). You will need to update this to _at least_ 2 or 4GB memory and 50-100GB space. To do this, execute commands like the following (replacing the numbers in the second command as appropriate, based on the [system requirements](#requirements)):
@@ -173,7 +188,6 @@ dogenode tail dogecoin
 dogenode tail dogeparty
 ```
 
-<a name="accessing"></a>**Access the system**
 
 Once running, the system listens on the following ports:
 
@@ -259,7 +273,6 @@ Or, to view the entire log, run:
 dogenode logs <service>
 ```
 
-<a name="servicenames"></a>Where `<service>` may be one the following, or blank to tail all services:
 
 * `dogeparty` (`dogeparty-server` mainnet)
 * `dogeblock` (`dogeblock` mainnet)
@@ -315,7 +328,6 @@ To pull the newest software from the git repositories and restart the appropriat
 dogenode update <service>
 ```
 
-<a name="servicenames_code"></a>Where `<service>` is one of the following, or blank for all applicable services:
 
 * `dogeparty`
 * `dogeparty-testnet`

@@ -1,5 +1,12 @@
 # Dogeparty Exchange Integration
 
+- [Basic Setup](#basic-setup)
+- [Handling Deposits using Separate Addresses](#handling-deposits-using-separate-addresses)
+- [Handling Deposits using Memo Transactions](#handling-deposits-using-memo-transactions)
+- [Handling Withdrawals (Single Send)](#handling-withdrawals-single-send)
+- [Batching Withdrawals (Multi-Peer-Multi-Asset Send)](#batching-withdrawals-multi-peer-multi-asset-send)
+- [Best practices](#best-practices)
+
 By adding support for Dogeparty, your exchange not only gets [XDP market](http://coinmarketcap.com/currencies/dogeparty/) support, but support for any other Dogeparty assets listed [here](http://dogeparty.xchain.io/assets)).
 
 Technically, the process is rather straightforward. However, as Dogeparty is not a fork of Dogecoin Core, adding Dogeparty support to your exchange is slightly different from adding support for a cryptocurrency that is, like Litecoin or Dogecoin.  We outline the general process below (for XDP, but the process is identical for all Dogeparty assets):

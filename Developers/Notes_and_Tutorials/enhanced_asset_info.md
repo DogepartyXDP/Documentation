@@ -1,9 +1,18 @@
-#Enhanced Asset Info
+# Enhanced Asset Info
+
+- [Token Info](#token-info)
+  - [URL format](#url-format)
+  - [JSON format](#json-format)
+  - [Examples](#examples)
+- [Other Topics](#other-topics)
+  - [Validity and refreshing](#validity-and-refreshing)
+  - [Validating your JSON data](#validating-your-json-data)
 
 When initially setting or changing your asset's (token's) description, you can enable enhanced functionality (such as an token image and a longer description) by providing a URL to a specially formatted .json file (e.g. http://www.mydomain.com/foo.json) as the description. This allows the token owner to provide enhanced information to the token's holders, and enhances the user experience for these holders for wallet implementations that support this spec.
 
-Token Info URL format
----------------------------
+## Token Info
+
+### URL format
 
 The URL itself in the broadcast text field must conform to the following:
 * Must fully fit within the text field space allowed
@@ -12,7 +21,7 @@ The URL itself in the broadcast text field must conform to the following:
 * It is recommended that the server return the JSON data with the correct MIME type set (e.g. "application/json")
 * A HTTP 200 response code must be returned (redirects, e.g. 301, 302, etc. are not allowed)
 
-## Token Info JSON format
+### JSON format
 
 The JSON object/mapping the URL points to must contain the following data:
 
@@ -24,8 +33,7 @@ The JSON object/mapping the URL points to must contain the following data:
 <tr><td><b>pgpsig</b></td><td>Optional</td><td>A link to a pgp signature text/file that will or can be used to sign messages by the issuer of this token. 100 characters max. Must be a valid URL that starts with "http://" or "https://"</td></tr>
 </table>
 
-Examples
---------
+### Examples
 
 Here's an example for a token called <b>MYTOKEN</b>:
 
@@ -34,23 +42,19 @@ Here's an example for a token called <b>MYTOKEN</b>:
       "http://www.mysite.com", "pgpsig":
       "http://www.mysite.com/MYTOKEN.pgp" }
 
-Other Topics
-------------
+## Other Topics
 
-###Validity and refreshing
+### Validity and refreshing
 
 Every 30-60 minutes, the Dogewallet system will query this URL provided to validate and fetch the necessary information. If the information you provided is reachable and valid (within a 1 second response time), your token's information will be enhanced based on this data.
 In order for this data file to be deemed as valid for a specific token/asset, there must have been either an initial issuance, or a description change transaction for that asset, and the text field of that description must have been set to the URL of this JSON file. If the information you provided is reachable and valid (within a 5 second response time), your token's information will be enhanced based on this data. If it is not, counterblockd will retry up to 2 additional times, over the next 30 or so minutes, and then give up until another transaction is made that changes the description field (it may be to the same URL, but another description change transaction is necessary to reinitialize the validity check by counterblockd).
 
 ### Validating your JSON data
 
-Your JSON data must respect and validate against [this][] JSON schema.
+Your JSON data must respect and validate against [this](https://raw.githubusercontent.com/DogepartyXDP/dogeblock/master/dogeblock/schemas/asset.schema.json) JSON schema.
 If the validation fails on any level, counterblockd will not accept the
 data.
 
-To check your data against this schema, go [here][]. Paste the schema
+To check your data against this schema, go [here](http://json-schema-validator.herokuapp.com/). Paste the schema
 from the link above into the **Schema** field, and place your example
 output into the **Data** field. Then click the **Validate** button
-
-  [this]: https://raw.githubusercontent.com/DogepartyXDP/dogeblock/master/dogeblock/schemas/asset.schema.json
-  [here]: http://json-schema-validator.herokuapp.com/
