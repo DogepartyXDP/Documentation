@@ -19,18 +19,18 @@
   - Can I run my own Counterwallet server?
   - I want to translate Counterwallet to my language
 - [Counterwallet Tutorials](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/tree/master/UI/Counterwallet_Tutorials)
-  - [Getting Started](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master//UI/Counterwallet_Tutorials/getting_started_cw.md)
+  - [Getting Started](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master/UI/Counterwallet_Tutorials/getting_started_cw.md)
   - Addresses
-    - [Create Addresses](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master//UI/Counterwallet_Tutorials/create_addresses.md)
-    - [Show QR Code](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master//UI/Counterwallet_Tutorials/show_qr_code.md)
-  - [Create Token](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master//UI/Counterwallet_Tutorials/create_token.md)
-    - [Change Token Settings](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master//UI/Counterwallet_Tutorials/change_token_settings.md)
-    - [Pay Distribution](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master//UI/Counterwallet_Tutorials/pay_distribution.md)
-  - [Get Token Info](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master//UI/Counterwallet_Tutorials/get_token_info.md)
-  - [Buy and Sell Assets on the DEX](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master//UI/Counterwallet_Tutorials/buy_and_sell_assets_on_the_dex.md)
-    - [Trading on the DEX](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master//UI/Counterwallet_Tutorials/trade.md)
-  - [Broadcast](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master//UI/Counterwallet_Tutorials/broadcast.md)
-  - [Multisig](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master//UI/Counterwallet_Tutorials/multisig_counterwallet.md)
+    - [Create Addresses](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master/UI/Counterwallet_Tutorials/create_addresses.md)
+    - [Show QR Code](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master/UI/Counterwallet_Tutorials/show_qr_code.md)
+  - [Create Token](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master/UI/Counterwallet_Tutorials/create_token.md)
+    - [Change Token Settings](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master/UI/Counterwallet_Tutorials/change_token_settings.md)
+    - [Pay Distribution](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master/UI/Counterwallet_Tutorials/pay_distribution.md)
+  - [Get Token Info](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master/UI/Counterwallet_Tutorials/get_token_info.md)
+  - [Buy and Sell Assets on the DEX](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master/UI/Counterwallet_Tutorials/buy_and_sell_assets_on_the_dex.md)
+    - [Trading on the DEX](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master/UI/Counterwallet_Tutorials/trade.md)
+  - [Broadcast](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master/UI/Counterwallet_Tutorials/broadcast.md)
+  - [Multisig](https://github.com/ShibeFaceSkrill/Dogeparty-XDP_Documentation/blob/master/UI/Counterwallet_Tutorials/multisig_counterwallet.md)
 - [Command-line Usage](CLI.md)
   - Burn
   - Send
