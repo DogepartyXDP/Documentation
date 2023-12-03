@@ -12,7 +12,7 @@ The Dogeparty Foundation is governed by three Founding Members and five elected 
 
 ### 3.1 Election Frequency
 
-  - Dogeparty Community Director elections shall be held once every 2 years
+  - Dogeparty Community Director elections shall be held biennially (once every two years) beginning with the election period at the end of calendar year 2023
 
 ### 3.2 Election Process
 
@@ -52,7 +52,7 @@ The Dogeparty Foundation is governed by three Founding Members and five elected 
 
   - Any elected director who misses three (3) scheduled meetings in a calendar year will subsequently receive a written communication from another member of the foundation with notification of the violation of the bylaws referencing the attendance requirements
 
-  - In the event that an individual elected director has exceeded the limits pursuant to section 5a and was issued a notification upon reaching the limit, the foundation may exercise its right to vote on the removal of the director from the foundation
+  - In the event that an individual elected director has exceeded the limits pursuant to section 4.3 and was issued a notification upon reaching the limit, the foundation may exercise its right to vote on the removal of the director from the foundation
     - A written notification shall be sent to the individual being removed from their position by a remaining member of the foundation
 
   - Following the removal of a community director due to a violation of the bylaws, a replacement shall be selected from the pool of nominees as documented during the prior election period
