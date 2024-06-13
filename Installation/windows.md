@@ -1,4 +1,10 @@
-#  Dogeparty Dependencies on Windows
+# Windoze
+
+- [Dogeparty Dependencies on Windows](#dogeparty-dependencies-on-windows)
+- [Usage and notes for Windows](#usage-and-notes-for-windows)
+- [Dogeparty "Doge Node" on Windows](#dogeparty-doge-node-on-windows)
+
+## Dogeparty Dependencies on Windows
 
 **Note:** These instructions are for a 32-bit installation. This will work with
 both 32-bit and 64-bit versions of Windows, and is the recommended approach.
@@ -34,7 +40,7 @@ Both Python and  Dogeparty code can be installed by non-admin users:
 * Python 3.5 will be installed to C:\Users\USER\AppData\Roaming\Python\Python35\
 *  Dogeparty executables will be installed to the Scripts subdirectory (example: `pip3 install --user dogeparty-lib`). 
 
-#  Dogeparty Doge Node” on Windows
+##  Dogeparty "Doge Node" on Windows
 
 The experimental  Dogeparty "Doge Node” for Windows based on Docker can be installed by following the official "Federated Node" [install guide](https://github.com/DogepartyXDP/Documentation/blob/master/Installation/dogeparty_node.md). dogeparty-server and dogeparty-client is sufficient for users who do not require local Counterwallet or Counterblock access.
 

@@ -1,9 +1,16 @@
-#Counterparty Platform Architecture 
+# Counterparty Platform Architecture 
 
 In the figure below you can see how all Counterparty platform components interact with each other.
 
-![](/_images/platform_architecture.png)
-  
+![](../_images/platform_architecture.png)
+
+## TOC
+
+- [Counterparty Platform Architecture](#counterparty-platform-architecture)
+- [counterparty-server](#counterparty-server)
+- [counterblock](#counterblock)
+- [Counterwallet](#counterwallet)
+- [armory_utxsvr](#armory_utxsvr)
 
 ## counterparty-server
 

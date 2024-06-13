@@ -1,5 +1,4 @@
-Advanced User and Developer Tutorials
-======================================
+# Advanced User and Developer Tutorials
 
 This page contains links to some useful tutorials intended for advanced users and developers. As new documentation is created it will be added here.
 

@@ -1,6 +1,15 @@
-#Buy and sell assets (tokens) on the DEx using XCP
+# Buy and sell assets (tokens) on the DEx using XCP
 
 This tutorial takes you through the process of buying and consequently selling a Counterparty-issued asset (or token/coin) from Counterwallet. By "Counterparty-issued" we mean "issued on the Counterparty platform by its users" as the Counterparty Project does not issue assets (XCP is the only asset that was issued by the Project).
+
+## TOC
+
+- [Summary](#summary)
+- [Walk-throughts](#walk-throughts)
+  - [Buy](#buy)
+  - [Sell](#sell)
+
+## Summary
 
 First, let's summarize how things work:
 
@@ -18,6 +27,8 @@ c) Understand the fees (see [What is the difference between Total and Real Esti
 
 d) Place a buy order on the DEx. If your offer gets matched within the duration of your order, your it will be settled. Otherwise it'll fail.  In case you change your mind or prices change, you can **cancel **your order before it expires (see [When is an order considered "active" and how can I cancel it?](https://counterpartytalk.org/t/when-is-a-dex-order-considered-active-and-how-can-i-cancel-it/1180))
 
+## Walk-throughts
+
 Now that we covered the basics, let's walk through buy and sell scenarios.
 
 Before we move on let's remind ourselves that the default order validity (which can be changed in Counterwallet **Settings** and which does not persist between logons) is 1000 blocks of the Bitcoin blockchain, so if you trade in unstable assets you may want to change that to a lower value or even switch to a centralized crypto-exchange where it normally doesn't cost anything to place (and cancel) an order. See KB articles under 3d (above) for additional details.
@@ -30,18 +41,18 @@ If not, move to the right and under **Select Another Pair **start typing the a
 
 Here we keep it simple and look for TESTASSETONE/XCP.
 
-![](/_images/counterparty-dex-find-asset-to-buy1.jpg)
+![](../../_images/counterparty-dex-find-asset-to-buy1.jpg)
   
 
 Once you click on TESTASSETONE, you will see the market. If it's any liquid, you'll see some buy and sell orders. We're buying so we're looking for Sell orders. At the very bottom of the screen we can see one sell offer: somebody is selling 22 TESTASSETONE in exchange for 2.2 XCP.  
 
-![](/_images/counterparty-dex-select-sell-offer.jpg)  
+![](../../_images/counterparty-dex-select-sell-offer.jpg)  
 
 If you're happy with that price, simply click on it and Counterwallet will populate your Buy Order form. Make sure the price is acceptable because matched orders cannot be cancelled! (It is not rare to hear that someone paid 0.001 for an asset that normally costs 0.0001.)
 
 A populated buy form can be modified (**Price, Amount**). Visually inspect all fields (especially if **Total** is a large number) to make sure one last time and then press the Buy button.
 
-![](/_images/counterparty-dex-populate-buy-order.jpg)    
+![](../../_images/counterparty-dex-populate-buy-order.jpg)    
 
 Now your order will remain valid until it's matched, cancelled or expired (whichever comes faster - see related KB mentioned under 3d, above). 
 

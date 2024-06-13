@@ -1,5 +1,4 @@
-Trading on the Decentralized Exchange
----------------------------
+# Trading on the Decentralized Exchange
 
 It is possible to trade on the Counterparty decentralized exchange directly inside Counterwallet. You can trade any token against any other token, including XCP. (Trading against BTC is planned for the near future.)
 
@@ -7,7 +6,7 @@ It is possible to trade on the Counterparty decentralized exchange directly insi
 
 * **All buy and sell orders are automatically escrowed _in the Bitcoin blockchain_ itself until they are completed.** The Counterparty exchange is decentralized and peer-to-peer. This means that there is never a third party or middleman (such as a server administrator, traditional exchange, clearing house, or bank). This kind of trading is called 'trustless', because you do not have to trust anyone to handle your funds and complete your trade correctly.
 
-![](/_images/trade1.png)
+![](../../_images/trade1.png)
 
 * Placing and cancelling orders requires the Bitcoin network to confirm these transactions, which may take some time.
 
@@ -24,57 +23,57 @@ Counterparty (the open-source Bitcoin toolkit for financial instruments and mark
 
 Click **Exchange** `->` **Markets on the sidebar menu.**
 
-![](/_images/trade2.png)
+![](../../_images/trade2.png)
 
 You will see the pairs with the most current activity. Clicking on these will forward you to their orderbook.
 
-![](/_images/trade3.png)
+![](../../_images/trade3.png)
 
 You can also specify a custom token to trade, if it does not appear in the top pairs list. 
 
-![](/_images/trade4.png)
+![](../../_images/trade4.png)
 
 Simply write your token in the field (autocomplete will try to help) and click XCP or other. Most tokens are primarily traded against XCP, but you can trade absolutely any token. If you want to trade a token you have just created, you need have to wait until it has been verified by the Bitcoin blockchain first.)
 
-![](/_images/trade5.png)
+![](../../_images/trade5.png)
 
 Then you will be able to see a graph showing the price and volume of that token (if there is enough data to display.)
 
-![](/_images/trade6.png)
+![](../../_images/trade6.png)
 
 Using this interface you can choose which of your addresses you are using to trade, and place orders directly.
 
-![](/_images/trade7.png)
+![](../../_images/trade7.png)
 
 Below this interface, you can look at the current orderbook for that pair.
 
-![](/_images/trade8.png)
+![](../../_images/trade8.png)
 
 And below that is a listing of previously completed trades, if there are any.
 
-![](/_images/trade9.png)
+![](../../_images/trade9.png)
 
 Let's try to buy 10 [LTBCOIN](http://ltbcoin.com/) just as an example. Set your desired price and amount, and press Buy.
 
-![](/_images/trade10.png)
+![](../../_images/trade10.png)
 
 Counterwallet will ask you to confirm your order to make sure everything is correct.
 
-![](/_images/trade11.png)
+![](../../_images/trade11.png)
 
 The order will now take some time to become valid and visible, while it is processed by the Bitcoin network.
 
-![](/_images/trade12.png)
+![](../../_images/trade12.png)
 
 You will be able to see the pending order by clicking the clock in the top left of the screen.
 
-![](/_images/trade13.png)
+![](../../_images/trade13.png)
 
 If you click the check to the left of the clock, you can see orders that have already been confirmed.
 
-![](/_images/trade14.png)
+![](../../_images/trade14.png)
 
 After a while, you will be able to see that the order confirmed. And if there is someone selling for the price that you are buying at, the order will be matched and completed automatically.
 
-![](/_images/trade15.png)
+![](../../_images/trade15.png)
 

@@ -24,4 +24,4 @@ If you want to get info about your votes, or other polls, you can use the voting
 
 **For [example](http://blockscan.com/vote/FLDCVOTEI):**
 
-![](/_images/voting_with_tokens1.png)
+![](../../_images/voting_with_tokens1.png)
